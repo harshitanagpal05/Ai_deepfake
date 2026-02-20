@@ -14,7 +14,7 @@
 
 [![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)](.)
 [![Version](https://img.shields.io/badge/Version-1.0%20Light-blue?style=for-the-badge)](.)
-[![Python](https://img.shields.io/badge/Python-3.10+-green?style=for-the-badge&logo=python)](.)
+[![NODE.JS](https://img.shields.io/badge/Python-3.10+-green?style=for-the-badge&logo=python)](.)
 [![License](https://img.shields.io/badge/License-Academic-purple?style=for-the-badge)](.)
 
 *A lightweight, web-based system that detects whether uploaded images are AI-generated or real.*
