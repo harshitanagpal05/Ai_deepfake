@@ -1,21 +1,23 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import UploadZone from './components/UploadZone';
+import HomePage from './pages/HomePage';
+import HowItWorksPage from './pages/HowItWorksPage';
+import FeaturesPage from './pages/FeaturesPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   return (
     <div className="app">
       <Navbar />
       <main className="app__content">
-        <div className="app__hero">
-          <h1>AI Image Authenticity Check</h1>
-          <p>
-            Upload a single image and get a probability score based on model,
-            artifact, and metadata analysis.
-          </p>
-        </div>
-        <UploadZone id="analyzer" />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/about" element={<AboutPage />} />
+        </Routes>
       </main>
     </div>
   );
