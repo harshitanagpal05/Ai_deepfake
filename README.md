@@ -1,25 +1,31 @@
 <div align="center">
 
-```
-██████╗ ███████╗███████╗██████╗ ███████╗ █████╗ ██╗  ██╗███████╗
-██╔══██╗██╔════╝██╔════╝██╔══██╗██╔════╝██╔══██╗██║ ██╔╝██╔════╝
-██║  ██║█████╗  █████╗  ██████╔╝█████╗  ███████║█████╔╝ █████╗
-██║  ██║██╔══╝  ██╔══╝  ██╔═══╝ ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝
-██████╔╝███████╗███████╗██║     ██║     ██║  ██║██║  ██╗███████╗
-╚═════╝ ╚══════╝╚══════╝╚═╝     ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
-                    AI-Generated Media Verifier
-```
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=220&section=header&text=DeepScan&fontSize=90&fontColor=ffffff&fontAlignY=40&desc=AI-Generated%20Media%20Verifier&descAlignY=62&descSize=22&animation=fadeIn" width="100%"/>
 
-### 🔍 AI-Generated Media Verifier — Light Edition
+<br/>
 
-[![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)](.)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1000&color=A78BFA&center=true&vCenter=true&width=600&lines=Can+you+tell+what%27s+real%3F+%F0%9F%A4%94;We+can.+%F0%9F%94%8D;Deepfake+detection+powered+by+AI+%F0%9F%A4%96;Upload.+Analyze.+Verify.+%E2%9C%85)](https://git.io/typing-svg)
+
+<br/>
+
+[![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge&logo=statuspage)](.)
 [![Version](https://img.shields.io/badge/Version-1.0%20Light-blue?style=for-the-badge)](.)
-[![NODE.JS](https://img.shields.io/badge/Python-3.10+-green?style=for-the-badge&logo=python)](.)
-[![License](https://img.shields.io/badge/License-Academic-purple?style=for-the-badge)](.)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)](.)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Connected-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](.)
+[![Express](https://img.shields.io/badge/Express.js-REST%20API-000000?style=for-the-badge&logo=express&logoColor=white)](.)
+[![License](https://img.shields.io/badge/License-Academic-8B5CF6?style=for-the-badge)](.)
 
-*A lightweight, web-based system that detects whether uploaded images are AI-generated or real.*
+<br/>
+
+> 💀 **Deepfakes are getting scary good.**
+> DeepScan fights back — upload any image, get a verdict in seconds.
+> *Because not everything you see is real.*
+
+<br/>
 
 **Department of Computer Science & Engineering (CSED) · Section 2FH**
+
+<br/>
 
 </div>
 
@@ -32,9 +38,10 @@
 - [System Architecture](#-system-architecture)
 - [Workflow](#-workflow)
 - [Tech Stack](#-tech-stack)
+- [API Endpoints](#-api-endpoints)
+- [Getting Started](#-getting-started)
 - [Project Scope](#-project-scope)
 - [Implementation Plan](#-implementation-plan)
-- [Expected Outcomes](#-expected-outcomes)
 - [Team](#-team)
 - [References](#-references)
 
@@ -42,29 +49,34 @@
 
 ## 🧠 About the Project
 
-Deepfake is a **lightweight, web-based deepfake and AI-generated media verifier** built as an academic project. As synthetic media becomes increasingly indistinguishable from reality, tools that help everyday users verify digital content are critical.
+**DeepScan** is a lightweight, web-based deepfake and AI-generated media verifier built as an academic project. As synthetic media becomes increasingly indistinguishable from reality, tools that help everyday users verify digital content are critical.
 
-DeepScan analyzes uploaded images using:
-- **Pre-trained AI classification models** (CNN / EfficientNet-based)
-- **Visual artifact heuristics** — texture inconsistencies, edge anomalies, frequency patterns
-- **Metadata forensics** — EXIF data cross-referencing
+DeepScan analyzes uploaded images through a **3-layer detection pipeline** — no GPU, no heavy setup, just results:
 
-The system outputs a **probability score** (e.g., `72% — Likely AI-Generated`) in a clean, user-friendly interface — no technical expertise required.
+| Layer | What it does |
+|---|---|
+| 🎨 **Visual Artifact Analysis** | Color variance, edge sharpness, brightness anomalies |
+| 🔎 **Metadata Forensics** | EXIF parsing — camera info, AI software detection, timestamps |
+| ⚖️ **Score Aggregation** | Weighted fusion → final probability score + verdict |
 
-> ⚠️ **Note:** This is a Light Version intended for academic and demonstration purposes. It does not provide legal or forensic-grade accuracy.
+The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) with confidence rating and detailed breakdown — no technical expertise required.
+
+> ⚠️ **Light Version** — built for academic and demonstration purposes. Not legal or forensic-grade.
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| 🖼️ **Image Upload & Verification** | Drag-and-drop or click to upload images for instant analysis |
-| 🤖 **Lightweight Deepfake Detection** | Optimized pre-trained model — fast inference, no GPU required |
-| 📊 **AI Probability Score** | Clear 0–100% confidence meter — *Real* or *Synthetic* verdict |
-| 🔎 **Metadata Analysis** | EXIF forensics — flags missing camera info & timestamp anomalies |
-| 🎨 **React Component UI** | Built with reusable React components — responsive, fast, and state-driven |
-| ⚡ **Fast Processing** | End-to-end pipeline completes in under 3 seconds |
+| Feature | Description | Status |
+|---|---|---|
+| 🖼️ **Image Upload** | Drag-and-drop or click — JPEG, PNG, WEBP supported | ✅ Done |
+| 🤖 **Artifact Detection** | Heuristic scan — color variance, edges, brightness | ✅ Done |
+| 📊 **AI Probability Score** | 0–100% confidence score with Real / Synthetic verdict | ✅ Done |
+| 🔎 **Metadata Forensics** | EXIF parsing — flags missing camera, AI software, timestamps | ✅ Done |
+| ⚖️ **Weighted Score Fusion** | 3 signals combined into one final score intelligently | ✅ Done |
+| 🗄️ **Result Logging** | Every scan saved to MongoDB with timestamp & breakdown | ✅ Done |
+| 🎨 **React UI** | Reusable components — responsive, fast, state-driven | ⏳ Pending |
+| ⚡ **Fast Pipeline** | End-to-end analysis completes in under 3 seconds | ✅ Done |
 
 ---
 
@@ -79,35 +91,31 @@ The system outputs a **probability score** (e.g., `72% — Likely AI-Generated`)
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                 LAYER 2 — API GATEWAY                       │
-│      Node.js / Express.js  ·  File Validator  ·  Router     │
+│      Node.js / Express.js  ·  Multer Validator  ·  Router   │
 └──────────┬──────────────────────────────┬───────────────────┘
            │                              │
            ▼                              ▼
 ┌──────────────────────┐      ┌───────────────────────────────┐
 │  METADATA FORENSICS  │      │     DETECTION ENGINE          │
-│  EXIF Parser         │      │  Preprocessor (OpenCV)        │
-│  Timestamp Checker   │      │  Artifact Heuristics          │
-│  Device Info Flags   │      │  Feature Extractor            │
+│  EXIF Parser (exifr) │      │  Sharp Image Processor        │
+│  Timestamp Checker   │      │  Color Variance Analysis      │
+│  AI Software Flags   │      │  Edge Sharpness Heuristics    │
+│  Camera Info Check   │      │  Brightness Anomaly Check     │
 └──────────┬───────────┘      └──────────────┬────────────────┘
-           │                                  │
-           │               ┌──────────────────▼────────────────┐
-           │               │         ML MODEL LAYER            │
-           │               │   Pre-trained Deepfake Classifier  │
-           │               │   OpenCV-based Inference           │
-           │               └──────────────────┬────────────────┘
            │                                  │
            └──────────────┬───────────────────┘
                           │  Weighted Score Fusion
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  SCORE AGGREGATOR                           │
-│          Model Score + Artifact Score + Metadata Score      │
+│     Model (50%)  +  Artifact (30%)  +  Metadata (20%)       │
 │                  → Final Probability %                      │
+│         → Verdict: REAL / UNCERTAIN / SYNTHETIC             │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ▼
               Result returned to UI
-         [ 72% — ⚠ LIKELY SYNTHETIC ]
+         [ 72% — ⚠ LIKELY SYNTHETIC · Medium Confidence ]
 
           ┌────────────────────────┐
           │        MongoDB         │
@@ -124,68 +132,149 @@ User Uploads Image
        │
        ▼
 ┌─────────────┐
+│  Validate   │  ← File type · Size limit · Multer
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
 │ Preprocess  │  ← Resize · Normalize · Extract Metadata
 └──────┬──────┘
        │
        ├──────────────────────────┐
        ▼                          ▼
 ┌─────────────┐          ┌────────────────┐
-│  ML Model   │          │ Artifact Scan  │
-│  Inference  │          │ + EXIF Forensic│
+│  Artifact   │          │    Metadata    │
+│  Analysis   │          │   Forensics    │
+│  (Sharp)    │          │   (exifr)      │
 └──────┬──────┘          └───────┬────────┘
        │                          │
        └──────────┬───────────────┘
                   ▼
          ┌────────────────┐
-         │Score Aggregator│
+         │Score Aggregator│  ← Weighted fusion
          └───────┬────────┘
+                 │
+                 ▼
+         ┌──────────────┐
+         │  Save to DB  │  ← MongoDB logging
+         └───────┬──────┘
                  │
                  ▼
         Display Result to User
       ┌─────────────────────────┐
-      │  Probability: 72%       │
+      │  Final Score: 72%       │
       │  Verdict: ⚠ SYNTHETIC   │
-      │  Source: AI-Generated   │
+      │  Confidence: Medium     │
+      │  Breakdown: shown       │
       └─────────────────────────┘
 ```
 
-**Step-by-step:**
-
-1. **Upload** — User submits an image or video frame via the web interface
-2. **Preprocess** — Resize, normalize, strip and preserve EXIF metadata
-3. **Artifact Analysis** — Heuristic scan for GAN fingerprints, texture anomalies, lighting inconsistencies
-4. **Model Inference** — CNN classifier produces a real vs. synthetic logit score
-5. **Metadata Forensics** — EXIF cross-referencing; missing/anomalous fields flagged as synthetic signals
-6. **Score Fusion** — Weighted ensemble of model + heuristic + metadata scores
-7. **Result Display** — Probability meter, verdict, and signal summary shown to user
+1. **Upload** — JPEG, PNG, WEBP · max 5MB
+2. **Validate** — Multer checks file type and size
+3. **Artifact Analysis** — Sharp scans color variance, edge sharpness, brightness
+4. **Metadata Forensics** — EXIF flags missing camera, AI software, timestamp anomalies
+5. **Score Fusion** — Model 50% + Artifact 30% + Metadata 20%
+6. **DB Logging** — Full result saved to MongoDB
+7. **Response** — Score, verdict, confidence, breakdown returned to frontend
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend**
+<div align="center">
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
+</div>
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | React.js · Axios · CSS3 |
+| **Backend** | Node.js · Express.js · Multer |
+| **Image Analysis** | Sharp · exifr · Heuristic Detection |
+| **Database** | MongoDB · Mongoose |
+| **Dev Tools** | Postman · VS Code · Git · GitHub |
+
+---
+
+## 📡 API Endpoints
+
+### `POST /api/analyze`
+Upload an image for deepfake analysis.
+
+**Request**
 ```
-React.js    JavaScript (ES6+)    CSS3    HTML5
+Body    : form-data
+Key     : image (type: File)
+Allowed : .jpg · .jpeg · .png · .webp
+Max Size: 5MB
 ```
 
-**Backend**
-```
-Node.js    Express.js    REST API
+**Response**
+```json
+{
+  "id": "69b03d5a06d049d960e7937c",
+  "final_score": 72,
+  "verdict": "LIKELY SYNTHETIC",
+  "confidence": "Medium",
+  "breakdown": {
+    "model_score": 68,
+    "artifact_score": 75,
+    "metadata_score": 85
+  },
+  "flags": ["No EXIF data found — strong synthetic signal"],
+  "analyzed_at": "2026-03-10T15:48:42.235Z"
+}
 ```
 
-**Database**
-```
-MongoDB
+### `GET /api/results`
+Fetch last 20 scan results from the database.
+
+**Response**
+```json
+{
+  "results": [ ...array of past scans... ]
+}
 ```
 
-**ML & Image Processing**
-```
-OpenCV    Pre-trained Deepfake Detection Model
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js v18+
+- MongoDB running locally
+
+### Clone the repo
+```bash
+git clone https://github.com/namann5/Ai_deepfake.git
+cd Ai_deepfake
 ```
 
-**Dataset**
+### Backend Setup
+```bash
+cd deepscan-backend
+npm install
+node server.js
 ```
-Sample real and AI-generated images (for testing)
+
+### Environment Variables
+Create `.env` inside `deepscan-backend/`:
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/deepscan
+```
+
+### Frontend Setup
+```bash
+cd deepscan-frontend
+npm install
+npm start
 ```
 
 ---
@@ -194,14 +283,15 @@ Sample real and AI-generated images (for testing)
 
 ### ✅ In Scope
 - Detection of AI-generated and deepfake **images**
-- Analysis of image **visual artifacts** and **metadata**
-- Display of **probability scores** (Real / Synthetic verdict)
-- Simple, clean **web-based user interface**
+- **Visual artifact** and **metadata** analysis
+- **Probability scores** with verdict and confidence rating
+- Clean **web-based UI**
+- **Scan history** stored in MongoDB
 
 ### ❌ Out of Scope
 - Real-time **video** deepfake detection
 - **Legal or forensic-grade** accuracy
-- Detection of **all future AI models**
+- Detection of models released after training data cutoff
 
 ---
 
@@ -210,8 +300,8 @@ Sample real and AI-generated images (for testing)
 ```
 Phase 1  ██████████  Requirement Analysis & Problem Understanding   ✅ Done
 Phase 2  ██████████  Dataset & Pre-trained Model Selection          ✅ Done
-Phase 3  ████████░░  System Architecture Design                     🔄 In Progress
-Phase 4  ██████░░░░  Backend Development                            🔄 In Progress
+Phase 3  ██████████  System Architecture Design                     ✅ Done
+Phase 4  ██████████  Backend Development                            ✅ Done
 Phase 5  ░░░░░░░░░░  Frontend Development                           ⏳ Pending
 Phase 6  ░░░░░░░░░░  Frontend–Backend Integration                   ⏳ Pending
 Phase 7  ░░░░░░░░░░  Testing & Performance Evaluation               ⏳ Pending
@@ -220,27 +310,16 @@ Phase 8  ░░░░░░░░░░  Deployment & Documentation             
 
 ---
 
-## 🎯 Expected Outcomes
-
-By project completion, DeepScan will:
-
-- ✔ Detect AI-generated images with **reasonable academic-grade accuracy**
-- ✔ Provide **probability-based verification results** with a visual confidence meter
-- ✔ Help users understand whether media content is **real or synthetic**
-- ✔ Serve as a **practical, educational tool** against digital misinformation
-
----
-
 ## 👥 Team
 
 | Name | Role | ID |
 |---|---|---|
-| **Harshita Nagpal** | Frontend Development & Documentation | 12515990016 |
-| **Arpita Raj** | Frontend Development & UI Design | 12515990007 |
-| **Naman Singh** | Backend Development & Testing | 12515990024 |
 | **Anurag Singh** | Backend Development & System Analysis | 12515990006 |
+| **Arpita Raj** | Frontend Development & UI Design | 12515990007 |
+| **Harshita Nagpal** | Frontend Development & Documentation | 12515990016 |
+| **Naman Singh** | Backend Development & Testing | 12515990024 |
 
-**Project Supervisor:** Mr. Abhishek Singh *(Technical Trainer)*
+**Supervisor:** Mr. Abhishek Singh *(Technical Trainer)*
 **Submitted To:** Mr. Sanjay Madaan
 
 ---
@@ -250,15 +329,19 @@ By project completion, DeepScan will:
 1. Research papers on Deepfake Detection
 2. Open-source AI-generated image detection models
 3. IEEE and ACM digital libraries
-4. Online resources — computer vision & deep learning documentation
-5. Public deepfake & AI-generated image datasets (Kaggle, FaceForensics++)
+4. Sharp.js documentation — image processing
+5. exifr documentation — EXIF metadata parsing
+6. FaceForensics++ dataset — Kaggle
+7. Online resources — computer vision & deep learning
 
 ---
 
 <div align="center">
 
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:24243e,50:302b63,100:0f0c29&height=120&section=footer" width="100%"/>
+
 *Department of Computer Science & Engineering (CSED) · Section 2FH · Academic Project*
 
-**Deepfake AI Verifier** — Fighting synthetic misinformation, one pixel at a time.
+**DeepScan** — Fighting synthetic misinformation, one pixel at a time. 🔍
 
 </div>
