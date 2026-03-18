@@ -100,8 +100,8 @@ export default function ContactPage() {
 
           <div className="contact__email">
             <span className="contact__email-label">Email us</span>
-            <a href="mailto:deepscan@info.com" className="contact__email-link">
-              deepscan@info.com
+            <a href="mailto:info@aideepfake.com" className="contact__email-link">
+              info@aideepfake.com
             </a>
           </div>
         </section>

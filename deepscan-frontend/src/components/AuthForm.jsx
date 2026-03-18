@@ -59,7 +59,7 @@ export default function AuthForm({ initialMode = 'signin', showClose = false, on
     <div className="auth-modal" role="region" aria-label="Authentication">
       <div className="auth-modal__header">
         <div>
-          <div className="auth-modal__kicker">DeepScan</div>
+          <div className="auth-modal__kicker">AI Deepfake</div>
           <h2 className="auth-modal__title">{title}</h2>
           <div className="auth-modal__subtitle">AI Deepfake Detection Platform</div>
         </div>
@@ -155,7 +155,7 @@ export default function AuthForm({ initialMode = 'signin', showClose = false, on
         </button>
 
         <div className="auth-modal__fineprint">
-          By clicking “{submitLabel}”, you agree that DeepScan may store and process your data to
+          By clicking “{submitLabel}”, you agree that AI Deepfake may store and process your data to
           deliver the AI Deepfake Detection Platform experience.
         </div>
       </form>

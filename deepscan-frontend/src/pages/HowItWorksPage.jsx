@@ -7,10 +7,10 @@ export default function HowItWorksPage() {
       <header className="how__hero">
         <div className="how__hero-copy">
           <p className="how__kicker">Guide</p>
-          <h1 className="how__title">How DeepScan Works</h1>
+          <h1 className="how__title">How AI Deepfake Works</h1>
           <p className="how__subtitle">
             Upload an image, run analysis, then read an AI probability score plus the signals behind it.
-            DeepScan is an AI Deepfake Detection Platform built to be understandable—not just accurate.
+            AI Deepfake is an AI Deepfake Detection Platform built to be understandable—not just accurate.
           </p>
           <div className="how__cta-row">
             <Link to="/" className="how__btn how__btn--primary">Try it now</Link>
@@ -43,7 +43,7 @@ export default function HowItWorksPage() {
           <div className="how-step__num">02</div>
           <div className="how-step__body">
             <h2>Analyze</h2>
-            <p>DeepScan sends your image to the backend for inspection of patterns, artifacts, and metadata.</p>
+            <p>AI Deepfake sends your image to the backend for inspection of patterns, artifacts, and metadata.</p>
           </div>
         </article>
         <article className="how-step how-step--wide">

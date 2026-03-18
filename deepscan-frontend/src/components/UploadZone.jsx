@@ -77,7 +77,7 @@ export default function UploadZone({ id }) {
         )}
 
         <button
-          className="upload-zone__button"
+          className={`upload-zone__button ${loading ? 'is-loading' : ''}`}
           onClick={handleSubmit}
           disabled={!file || loading}
           type="button"

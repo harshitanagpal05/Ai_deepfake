@@ -1,43 +1,31 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function AnimatedTitle({
-  eyebrow = 'DeepScan',
+  eyebrow = 'AI Deepfake',
   firstLine = 'Building',
   secondLine = 'trust online',
   subtitle = 'Upload an image and get a fast authenticity score using artifact and metadata signals.',
 }) {
-  const words = useMemo(() => {
-    const a = String(firstLine).trim().split(/\s+/);
-    const b = String(secondLine).trim().split(/\s+/);
-    return { a, b };
-  }, [firstLine, secondLine]);
+  const [glitch, setGlitch] = useState(false);
+
+  useEffect(() => {
+    // trigger glitch animation on mount
+    setGlitch(true);
+    const timer = setTimeout(() => setGlitch(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="animated-hero">
-      <div className="animated-hero__eyebrow">{eyebrow}</div>
+      <div className={`animated-hero__eyebrow glitch-flicker ${glitch ? 'animate' : ''}`}>
+        {eyebrow}
+      </div>
 
-      <h1 className="animated-hero__title" aria-label={`${firstLine} ${secondLine}`}>
-        <span className="animated-hero__line">
-          {words.a.map((w, idx) => (
-            <span key={`a-${w}-${idx}`} className="animated-hero__word" style={{ '--d': `${idx * 90}ms` }}>
-              {w}
-            </span>
-          ))}
-        </span>
-        <span className="animated-hero__line animated-hero__line--muted">
-          {words.b.map((w, idx) => (
-            <span
-              key={`b-${w}-${idx}`}
-              className="animated-hero__word"
-              style={{ '--d': `${(words.a.length + idx) * 90}ms` }}
-            >
-              {w}
-            </span>
-          ))}
-        </span>
+      <h1 className="animated-hero__title typewriter" aria-label={`${firstLine} ${secondLine}`}>
+        {firstLine} <span className="animated-hero__line--muted">{secondLine}</span>
       </h1>
 
-      <p className="animated-hero__subtitle">{subtitle}</p>
+      <p className="animated-hero__subtitle fade-in-delay">{subtitle}</p>
     </div>
   );
 }

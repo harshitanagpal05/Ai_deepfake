@@ -22,7 +22,7 @@ export default function Navbar({ isAuthed, userEmail, onAuthNavigate, onLogout, 
     <header className="navbar">
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-text">DeepScan</span>
+          <span className="navbar__logo-text">AI Deepfake</span>
           <span className="navbar__logo-subtitle">AI Deepfake Detection Platform</span>
         </Link>
 
@@ -66,7 +66,6 @@ export default function Navbar({ isAuthed, userEmail, onAuthNavigate, onLogout, 
                 onClick={onLogout}
                 title={userEmail || 'Logout'}
               >
-                <span className="navbar__btn-dot" aria-hidden="true" />
                 Logout
               </button>
             </>
@@ -76,7 +75,6 @@ export default function Navbar({ isAuthed, userEmail, onAuthNavigate, onLogout, 
               className="navbar__btn navbar__btn--contact"
               onClick={onAuthNavigate}
             >
-              <span className="navbar__btn-dot" aria-hidden="true" />
               Sign in / Sign up
             </button>
           )}

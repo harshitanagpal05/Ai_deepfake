@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'deepscan_auth_v1';
+const STORAGE_KEY = 'aideepfake_auth_v1';
 
 export function getAuth() {
   try {

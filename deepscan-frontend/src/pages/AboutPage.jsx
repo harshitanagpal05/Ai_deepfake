@@ -6,14 +6,14 @@ export default function AboutPage() {
     <div className="about">
       <header className="about__hero">
         <div className="about__hero-left">
-          <p className="about__kicker">DeepScan</p>
+          <p className="about__kicker">AI Deepfake</p>
           <h1 className="about__title">Built for clarity in an AI-heavy world</h1>
           <p className="about__subtitle">
-            AI Deepfake Detection Platform. DeepScan helps you make faster, more informed decisions by
+            AI Deepfake Detection Platform. AI Deepfake helps you make faster, more informed decisions by
             turning complex signals into a readable score and breakdown.
           </p>
           <div className="about__hero-actions">
-            <Link to="/" className="about__btn about__btn--primary">Try DeepScan</Link>
+            <Link to="/" className="about__btn about__btn--primary">Try AI Deepfake</Link>
             <Link to="/contact" className="about__btn about__btn--secondary">Get in touch</Link>
           </div>
         </div>
