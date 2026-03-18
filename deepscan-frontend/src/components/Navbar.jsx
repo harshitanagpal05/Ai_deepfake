@@ -1,22 +1,29 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar({ isAuthed, userEmail, onAuthNavigate, onLogout, onGoToChecker }) {
   const navigate = useNavigate();
 
   const goToAnalyzer = () => {
-    if (window.location.pathname === '/') {
-      document.getElementById('analyzer')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/', { state: { scrollToAnalyzer: true } });
+    if (!isAuthed) {
+      navigate('/auth', { state: { authMode: 'signin', redirectTo: '/checker' } });
+      return;
     }
+
+    if (window.location.pathname === '/checker') {
+      document.getElementById('analyzer')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    navigate('/checker');
   };
 
   return (
     <header className="navbar">
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-text">DeepScan</span>
+          <span className="navbar__logo-text">AI Deepfake</span>
+          <span className="navbar__logo-subtitle">AI Deepfake Detection Platform</span>
         </Link>
 
         <nav className="navbar__links">
@@ -42,10 +49,35 @@ export default function Navbar() {
           >
             Try now
           </button>
-          <Link to="/contact" className="navbar__btn navbar__btn--contact">
-            <span className="navbar__btn-dot" aria-hidden="true" />
-            Get in touch
-          </Link>
+
+          {isAuthed ? (
+            <>
+              <button
+                type="button"
+                className="navbar__btn navbar__btn--secondary"
+                onClick={onGoToChecker}
+                title="Open the checker"
+              >
+                Checker
+              </button>
+              <button
+                type="button"
+                className="navbar__btn navbar__btn--contact"
+                onClick={onLogout}
+                title={userEmail || 'Logout'}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="navbar__btn navbar__btn--contact"
+              onClick={onAuthNavigate}
+            >
+              Sign in / Sign up
+            </button>
+          )}
         </div>
       </div>
     </header>

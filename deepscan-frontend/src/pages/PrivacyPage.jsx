@@ -7,11 +7,11 @@ export default function PrivacyPage() {
       <div className="page__content">
         <h1 className="page__title">Privacy Policy</h1>
         <p className="page__intro">
-          Last updated: 2026. This policy describes how DeepScan collects, uses, and protects your information.
+          Last updated: 2026. This policy describes how AI Deepfake (AI Deepfake Detection Platform) collects, uses, and protects your information.
         </p>
         <section className="page__section">
           <h2>Information we collect</h2>
-          <p>When you use DeepScan, we process images you upload for analysis. We do not store images beyond what is needed to return results.</p>
+          <p>When you use AI Deepfake, we process images you upload for analysis. We do not store images beyond what is needed to return results.</p>
         </section>
         <section className="page__section">
           <h2>How we use your data</h2>

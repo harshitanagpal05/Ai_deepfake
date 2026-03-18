@@ -1,0 +1,89 @@
+
+/* OVERVIEW CARD LIST */
+.landing__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+.landing__list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.landing__list-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.landing__list-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-weight: 600;
+}
+.landing__list-value {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+/* AUTHENTICITY CARD BARS */
+.landing__progress-row {
+  margin-bottom: 16px;
+}
+.landing__progress-row:last-child {
+  margin-bottom: 0;
+}
+.landing__progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.landing__progress-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.landing__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  animation: fillBar 1s ease-out forwards;
+  width: 0;
+}
+
+@keyframes fillBar {
+  from { width: 0; }
+  to { width: var(--w); }
+}
+
+/* LIKELY DEEPFAKE BADGE */
+.landing__badge {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  animation: pulseBadge 3s infinite;
+  text-align: center;
+  width: 100%;
+}
+
+@keyframes pulseBadge {
+  0% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+  100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+}
