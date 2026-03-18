@@ -1,33 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const fs = require('fs');
-const upload = require('../middleware/fileValidator');
+const fs = require('fs').promises;
+const { upload, handleMulterError } = require('../middleware/fileValidator');
 const { analyzeMetadata } = require('../services/metadataService');
 const { runMLModel } = require('../services/mlService');
 const { aggregateScores } = require('../services/scoreAggregator');
-const Result = require('../models/Result'); // ← ADDED
+const Result = require('../models/Result');
 
-router.post('/analyze', upload.single('image'), async (req, res) => {
+// ─── POST /api/analyze ─────────────────────────────────────────────────────
+router.post('/analyze', upload.single('image'), async (req, res, next) => {
+  // Guard: ensure a file was actually uploaded
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file provided.' });
+  }
+
+  const filePath = req.file.path;
+
   try {
-    console.log('File received:', req.file.filename);
+    console.log('📂 File received:', req.file.filename);
 
-    // Run both in parallel
+    // Run metadata + ML analysis in parallel
     const [metadataResult, mlResult] = await Promise.all([
-      analyzeMetadata(req.file.path),
-      runMLModel(req.file.path)
+      analyzeMetadata(filePath),
+      runMLModel(filePath)
     ]);
 
-    // Aggregate scores
+    // Aggregate into final verdict
     const result = aggregateScores(
       metadataResult.metadata_score,
       mlResult.model_score,
       mlResult.artifact_score
     );
 
-    // Save to MongoDB ← ADDED
+    // Persist result to MongoDB
     const savedResult = await Result.create({
       filename: req.file.filename,
+      originalName: req.file.originalname,
       final_score: result.final_score,
       verdict: result.verdict,
       confidence: result.confidence,
@@ -36,18 +44,18 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
       raw_metadata: metadataResult.raw
     });
 
-    console.log('Saved to DB:', savedResult._id);
+    console.log('💾 Saved to DB:', savedResult._id);
 
-    // Delete temp file after analysis ← ADDED
-    fs.unlink(req.file.path, (err) => {
-      if (err) console.error('Failed to delete temp file:', err.message);
-      else console.log('Temp file deleted ✅');
-    });
+    // Delete temp upload file asynchronously (non-blocking)
+    fs.unlink(filePath)
+      .then(() => console.log('🗑️  Temp file deleted'))
+      .catch((e) => console.warn('⚠️  Could not delete temp file:', e.message));
 
-    res.json({
-      message: '✅ Analysis complete',
+    return res.status(200).json({
+      message: 'Analysis complete',
       id: savedResult._id,
       filename: req.file.filename,
+      originalName: req.file.originalname,
       final_score: result.final_score,
       verdict: result.verdict,
       confidence: result.confidence,
@@ -58,32 +66,62 @@ router.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    // Attempt cleanup on error
+    fs.unlink(filePath).catch(() => { });
+    console.error('❌ Analysis error:', err.message);
+    return res.status(503).json({ error: 'Analysis service failed. Please try again.' });
   }
 });
 
-// GET — fetch all past results ← ADDED
+// ─── GET /api/results ──────────────────────────────────────────────────────
+// Supports ?page=1&limit=20 for pagination
 router.get('/results', async (req, res) => {
   try {
-    const results = await Result.find()
-      .sort({ analyzed_at: -1 }) // newest first
-      .limit(20);
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
+    const skip = (page - 1) * limit;
 
-    res.json({ results });
+    const [results, total] = await Promise.all([
+      Result.find()
+        .sort({ analyzed_at: -1 })
+        .skip(skip)
+        .limit(limit)
+        .select('-raw_metadata'), // exclude heavy field from list
+      Result.countDocuments()
+    ]);
+
+    return res.json({
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      results
+    });
   } catch (err) {
-    res.status(500).json({ error: 'Could not fetch results' });
+    console.error('❌ Fetch results error:', err.message);
+    return res.status(500).json({ error: 'Could not fetch results.' });
   }
 });
 
-// Handle multer errors
-router.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ error: '❌ File too large. Max size is 5MB' });
+// ─── GET /api/results/:id ──────────────────────────────────────────────────
+router.get('/results/:id', async (req, res) => {
+  try {
+    const result = await Result.findById(req.params.id);
+    if (!result) {
+      return res.status(404).json({ error: 'Result not found.' });
     }
+    return res.json(result);
+  } catch (err) {
+    // Invalid ObjectId format
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid result ID format.' });
+    }
+    console.error('❌ Fetch result error:', err.message);
+    return res.status(500).json({ error: 'Could not fetch result.' });
   }
-  res.status(400).json({ error: err.message });
 });
+
+// ─── Multer Error Handler (must be last) ───────────────────────────────────
+router.use(handleMulterError);
 
 module.exports = router;

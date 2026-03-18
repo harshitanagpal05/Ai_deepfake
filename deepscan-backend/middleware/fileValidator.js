@@ -1,32 +1,52 @@
 const multer = require('multer');
 const path = require('path');
+const crypto = require('crypto');
 
+// ─── Storage Configuration ─────────────────────────────────────────────────
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    // Use an absolute path so the server works regardless of cwd
+    cb(null, path.join(__dirname, '..', 'uploads'));
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`;
-    cb(null, uniqueName);
+    // crypto.randomBytes gives collision-safe unique names
+    const randomHex = crypto.randomBytes(16).toString('hex');
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${randomHex}${ext}`);
   }
 });
 
-const fileFilter = (req, file, cb) => {
-  console.log('Detected MIME type:', file.mimetype); // ← must be here
-  
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+// ─── File Filter ───────────────────────────────────────────────────────────
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-  if (allowedTypes.includes(file.mimetype)) {
+const fileFilter = (req, file, cb) => {
+  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('❌ Only JPEG, PNG, and WEBP images are allowed'), false);
+    cb(new Error('Only JPEG, PNG, and WEBP images are allowed'), false);
   }
 };
 
+// ─── Multer Instance ───────────────────────────────────────────────────────
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5 MB
 });
 
-module.exports = upload;
+// ─── Shared Multer Error Handler ───────────────────────────────────────────
+// Attach to any router that uses multer so errors return clean JSON.
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'File too large. Maximum size is 5 MB.' });
+    }
+    return res.status(400).json({ error: `Upload error: ${err.message}` });
+  }
+  if (err) {
+    return res.status(400).json({ error: err.message });
+  }
+  next();
+};
+
+module.exports = { upload, handleMulterError };
