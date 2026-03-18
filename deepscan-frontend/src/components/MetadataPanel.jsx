@@ -22,10 +22,10 @@ export default function MetadataPanel({ metadata }) {
   return (
     <section className="metadata-panel">
       <div className="metadata-panel__title">EXIF Details</div>
-      <MetadataRow label="Camera Make" value={getValue(metadata, 'camera_make')} />
-      <MetadataRow label="Camera Model" value={getValue(metadata, 'camera_model')} />
-      <MetadataRow label="Software" value={getValue(metadata, 'software')} />
-      <MetadataRow label="Timestamp" value={getValue(metadata, 'timestamp')} />
+      <MetadataRow label="Camera Make" value={getValue(metadata, 'Make')} />
+      <MetadataRow label="Camera Model" value={getValue(metadata, 'Model')} />
+      <MetadataRow label="Software" value={getValue(metadata, 'Software')} />
+      <MetadataRow label="Timestamp" value={getValue(metadata, 'DateTime')} />
     </section>
   );
 }
