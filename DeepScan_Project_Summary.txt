@@ -1,0 +1,317 @@
+DeepScan - Project Summary
+AI Deepfake Detection Platform
+Date: April 3, 2026
+================================================================================
+
+
+WHAT WE DID TODAY
+================================================================================
+
+Today was a major infrastructure day for the DeepScan project. We focused on:
+  1. Dockerizing the entire application
+  2. Setting up a CI/CD pipeline with GitHub Actions
+  3. Debugging and fixing all integration issues so the full stack runs end-to-end
+
+
+STEP 1 - Dockerizing the Application
+--------------------------------------
+
+MongoDB
+  - Uses the official mongo:7 image
+  - Persistent named volume (mongo_data) so data survives container restarts
+  - Health check built in so backend waits until Mongo is truly ready
+
+Backend (Node.js / Express)
+  - Dockerfile        -> Production-optimized image (runs server.js directly)
+  - Dockerfile.dev    -> Development image with nodemon for auto hot-reload
+
+Frontend (React / CRA)
+  - Dockerfile        -> Multi-stage: Stage 1 compiles React, Stage 2 serves via Nginx
+                         Final image is only ~25MB!
+  - Dockerfile.dev    -> CRA dev server with hot-reload and volume mounts
+
+docker-compose.yml
+  -> Production compose file wiring all 3 services with health checks + restart policies
+
+docker-compose.dev.yml
+  -> Development override that mounts source code as volumes for instant hot-reload
+
+
+STEP 2 - CI/CD Pipeline with GitHub Actions
+---------------------------------------------
+
+Created .github/workflows/ci.yml
+Triggers automatically on every push or pull request to the main branch.
+
+  Job 1 - Backend Test:   npm ci -> run all Jest tests
+  Job 2 - Frontend Build: npm ci -> npm run build (catches compile errors)
+  Job 3 - Docker Push:    Build images -> push to GitHub Container Registry (GHCR)
+                          (Only on direct push to main, not PRs)
+
+
+STEP 3 - Debugging and Fixing Issues
+--------------------------------------
+
+Issue 1: Frontend container failing to start
+  Root Cause: Port 3000 held by Docker's internal vpnkit proxy (Windows bug)
+  Fix: Changed dev port mapping from 3000:3000 to 3001:3000
+
+Issue 2: "Failed to analyze the image" error
+  Root Cause: CORS policy only allowed localhost:3000, frontend moved to localhost:3001
+  Fix: Updated server.js to accept a comma-separated list of allowed origins.
+       Updated docker-compose.yml CORS_ORIGIN to include both ports.
+
+Issue 3: Port 5000 already in use on startup
+  Root Cause: Old Node.js process from a previous native run was still running
+  Fix: Found PID via netstat, terminated it, Docker could then bind the port
+
+
+================================================================================
+BEFORE vs AFTER - Implementing Docker
+================================================================================
+
+BEFORE DOCKER (Problems)
+--------------------------
+
+Setup:
+  - New dev had to manually install Node.js + npm + MongoDB
+  - Different Node.js versions caused mysterious bugs across machines
+  - Could take hours just to get the project running
+
+Starting the project:
+  - 3 separate terminals needed: MongoDB, backend (npm run dev), frontend (npm start)
+  - Easy to forget one, then waste time debugging "connection refused" errors
+
+Environment variables:
+  - Everyone managed their own .env files
+  - "Works on my machine" was the most common phrase
+
+Dependencies:
+  - node_modules conflicts between different projects on the same machine
+
+Database:
+  - MongoDB had to be installed locally
+  - Data differed between team members - impossible to reproduce bugs
+
+Deployment:
+  - No standard way to deploy
+  - Each server needed manual setup from scratch
+
+Testing:
+  - Tests ran against local MongoDB with existing dirty data
+  - Results could differ depending on what was already in the DB
+
+Collaboration:
+  - Onboarding a new developer took hours before they could write any code
+
+
+AFTER DOCKER (Improvements)
+-----------------------------
+
+Setup:
+  - Install Docker Desktop -> run one command -> done
+  - Works identically on Windows, Mac, and Linux
+
+Starting the project:
+  - ONE command starts everything:
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+  - MongoDB, Backend, Frontend all start together in the correct order
+
+Environment variables:
+  - Defined once in docker-compose.yml
+  - Consistent for every developer and every server
+
+Dependencies:
+  - Each container has its own isolated node_modules
+  - No conflicts between projects. Exact versions locked in image.
+
+Database:
+  - MongoDB runs in a container with a persistent named volume
+  - Consistent state. Easy to reset: docker compose down -v
+
+Deployment:
+  - Build once, run anywhere
+  - Same Docker image in development = same image in production. Zero surprises.
+
+Testing:
+  - CI/CD runs every test in a fresh, clean environment every time
+
+Collaboration:
+  - New developer setup time: ~5 minutes total
+
+
+================================================================================
+ADVANTAGES OF DOCKER IN THIS PROJECT
+================================================================================
+
+1. CONSISTENCY
+   Same Docker image runs on every machine and every server.
+   No more "it works on my machine" problems.
+
+2. ISOLATION
+   Each service runs in its own container and cannot affect others.
+
+3. EASY ONBOARDING
+   git clone -> docker compose up -d --build -> fully running in 5 minutes.
+
+4. HOT-RELOAD IN DEVELOPMENT
+   Source code is mounted as a Docker volume.
+   Edit any file -> nodemon/CRA reloads instantly. No rebuild needed.
+
+5. PRODUCTION-READY IMAGES
+   Backend: ~150MB (Node alpine) | Frontend: ~25MB (Nginx alpine)
+   Minimal, secure, and fast.
+
+6. AUTOMATED CI/CD
+   Every git push to main automatically tests, builds, and publishes Docker images.
+
+7. DATA PERSISTENCE
+   MongoDB data lives in a named volume (mongo_data).
+   Stopping containers does NOT delete data.
+
+8. SCALABILITY
+   Scaling is one line in docker-compose.yml:
+     backend:
+       deploy:
+         replicas: 3
+
+
+================================================================================
+CURRENT ARCHITECTURE (After Docker)
+================================================================================
+
+  Browser (localhost:3001)
+          |
+          v
+  [ Frontend Container ]     CRA Dev Server / Nginx - Port 3001->3000
+          |
+          | HTTP API calls
+          v
+  [ Backend Container ]      Node.js + Express - Port 5000
+    /api/analyze
+    /api/results
+          |
+          | Mongoose ODM
+          v
+  [ MongoDB Container ]      mongo:7 - Port 27017 - Volume: mongo_data
+
+
+================================================================================
+FUTURE ROADMAP - VIDEO DEEPFAKE DETECTION
+================================================================================
+
+The next major feature is VIDEO ANALYSIS.
+
+WHAT WE WILL ADD
+----------------
+
+Video Upload & Processing:
+  - Accept MP4, MOV, AVI, WebM video files
+  - Extract frames at intervals (e.g., every 0.5 seconds)
+  - Run existing image analysis pipeline on each extracted frame
+  - Aggregate all frame scores into one video-level deepfake verdict
+
+New Backend Services:
+  - videoService.js     -> Video validation + frame extraction via ffmpeg
+  - frameAggregator.js -> Combine per-frame scores into final video score
+  - New route: POST /api/analyze/video
+
+New Frontend Features:
+  - Video file support in the upload zone
+  - Video preview player before analysis
+  - Real-time progress bar (frame-by-frame)
+  - Timeline heatmap showing which timestamps were most suspicious
+  - Highlight reel of the most suspicious frames
+
+New Docker Services:
+  - deepscan-worker  -> Dedicated container for heavy ffmpeg video processing
+                        Keeps main backend fast and unblocked
+  - deepscan-redis   -> Job queue (Bull.js) so videos are processed in order
+  - WebSocket support for real-time progress updates to the browser
+
+Future Architecture:
+  Browser
+     |
+     |-> Frontend Container
+     |        |
+     |        |-> Backend Container -> MongoDB Container
+     |                 |
+     |                 |-> Redis Container (job queue)
+     |                          |
+     |                          |-> ffmpeg Worker Container (frame extraction)
+     |
+     |-> WebSocket (live progress updates to browser)
+
+WHY DOCKER MAKES VIDEO EASY:
+  - ffmpeg has an official Docker base image ready to use
+  - Adding a new service = a few lines in docker-compose.yml
+  - Worker container is isolated: if it crashes, the main backend keeps running
+  - Scale video workers instantly: just increase replicas count
+
+
+================================================================================
+FILES CREATED / MODIFIED TODAY
+================================================================================
+
+  Ai_deepfake/
+  |-- docker-compose.yml           NEW  - Production compose (all 3 services)
+  |-- docker-compose.dev.yml       NEW  - Dev override (hot-reload + volumes)
+  |-- .github/workflows/ci.yml     NEW  - GitHub Actions CI/CD pipeline
+  |
+  |-- deepscan-backend/
+  |   |-- Dockerfile               NEW  - Production backend image
+  |   |-- Dockerfile.dev           NEW  - Dev backend image (nodemon)
+  |   |-- .dockerignore            NEW  - Exclude node_modules and .env
+  |   |-- server.js                MOD  - CORS now accepts multiple origins
+  |
+  |-- deepscan-frontend/
+      |-- Dockerfile               NEW  - Multi-stage build -> Nginx
+      |-- Dockerfile.dev           NEW  - CRA dev server
+      |-- .dockerignore            NEW  - Exclude node_modules and build/
+      |-- nginx.conf               NEW  - SPA routing + gzip compression
+
+
+================================================================================
+QUICK REFERENCE - DAILY COMMANDS
+================================================================================
+
+  Start everything (dev mode with hot-reload):
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+  Stop everything (keep data):
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+  Stop + DELETE all data (fresh start):
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml down -v
+
+  View live logs from all containers:
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
+
+  View logs from one service:
+    docker logs deepscan-backend --tail 50
+
+  Rebuild after Dockerfile changes:
+    docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+
+  Check which containers are running:
+    docker ps
+
+  Open a shell inside the backend container:
+    docker exec -it deepscan-backend sh
+
+
+================================================================================
+ACCESS URLS
+================================================================================
+
+  Frontend App    ->  http://localhost:3001
+  Checker Page    ->  http://localhost:3001/checker
+  Backend API     ->  http://localhost:5000
+  Backend Health  ->  http://localhost:5000/
+  All Results     ->  http://localhost:5000/api/results
+  MongoDB         ->  mongodb://localhost:27017/deepscan
+
+
+================================================================================
+DeepScan - Building trust online, one image at a time.
+================================================================================

@@ -15,8 +15,16 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 // ─── CORS ──────────────────────────────────────────────────────────────────
-const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
-app.use(cors({ origin: allowedOrigin }));
+const corsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000,http://localhost:3001')
+  .split(',')
+  .map(o => o.trim());
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, Postman)
+    if (!origin || corsOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  }
+}));
 
 // ─── Body Parsers ──────────────────────────────────────────────────────────
 app.use(express.json());
