@@ -56,12 +56,8 @@ export default function HowItWorksPage() {
                 <p>Higher = more likely AI-generated. Use the score as a signal, not absolute proof.</p>
               </div>
               <div>
-                <h3>What we check</h3>
-                <ul>
-                  <li><strong>Model analysis</strong> — AI-like patterns</li>
-                  <li><strong>Artifacts</strong> — texture/edge inconsistencies</li>
-                  <li><strong>Metadata</strong> — missing or unusual EXIF</li>
-                </ul>
+                <h3>Read the breakdown</h3>
+                <p>Review the breakdown of signals provided for each analyzed image to understand why it was flagged.</p>
               </div>
             </div>
           </div>

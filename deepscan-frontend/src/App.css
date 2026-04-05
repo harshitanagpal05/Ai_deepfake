@@ -80,11 +80,11 @@
   white-space: nowrap;
 }
 
-/* Nav links */
-.navbar__links {
+/* Unified Right Nav Container */
+.navbar__right {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .navbar__link {
@@ -93,6 +93,9 @@
   font-weight: 500;
   font-size: 0.92rem;
   transition: color 0.2s ease;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
 }
 
 .navbar__link:hover {
@@ -112,13 +115,6 @@
   color: inherit;
 }
 
-/* Action buttons */
-.navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .navbar__btn {
   padding: 9px 16px;
   border-radius: var(--radius-pill);
@@ -127,7 +123,8 @@
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: none;
+  border: 1px solid transparent; /* Ensure borders don't ruin padding metrics */
+  box-sizing: border-box;
 }
 
 .navbar__btn--secondary {
@@ -301,7 +298,10 @@
 .landing__right {
   position: relative;
   z-index: 1;
-  min-height: 220px;
+  min-height: 380px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .landing__panel {
@@ -311,20 +311,28 @@
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 16px 44px rgba(15, 23, 42, 0.10);
+  box-sizing: border-box;
 }
 
 .landing__panel--light {
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(17, 24, 39, 0.86);
+  width: 320px;
+  height: 240px;
+  margin-top: -30px;
+  margin-right: 40px;
+  z-index: 1;
 }
 
 .landing__panel--dark {
   position: absolute;
-  right: 26px;
-  top: 96px;
-  width: min(360px, 92%);
+  top: 100px;
+  right: 0px;
+  width: 320px;
+  height: 240px;
   background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(17, 24, 39, 0.86));
   border-color: rgba(255, 255, 255, 0.08);
   color: #e5e7eb;
+  z-index: 2;
 }
 
 .landing__panel-chip {
@@ -391,7 +399,8 @@
 }
 
 .animated-hero__line--muted {
-  color: rgba(26, 32, 44, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  mix-blend-mode: overlay;
 }
 
 .animated-hero__word {
@@ -663,6 +672,35 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   object-fit: contain;
+}
+
+.upload-zone__remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.upload-zone__remove-btn:hover {
+  background: rgba(220, 38, 38, 0.8);
+  border-color: rgba(220, 38, 38, 1);
+  transform: scale(1.05);
+}
+
+.upload-zone__description-input:focus {
+  border-color: rgba(0, 212, 255, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1) !important;
 }
 
 .upload-zone__button {
@@ -996,28 +1034,38 @@
 
 .page-wide__hero-art {
   position: relative;
-  min-height: 180px;
+  min-height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .page-wide__art-card {
   position: absolute;
-  right: 0;
-  top: 18px;
-  width: min(320px, 100%);
-  background: rgba(255, 255, 255, 0.75);
+  right: 60px;
+  top: -10px;
+  width: 320px;
+  height: 180px;
+  background: rgba(17, 24, 39, 0.86);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 .page-wide__art-card--offset {
-  top: 92px;
-  right: 42px;
-  width: min(260px, 92%);
-  background: rgba(17, 24, 39, 0.88);
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 320px;
+  height: 180px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(17, 24, 39, 0.86));
   border-color: rgba(255, 255, 255, 0.08);
   color: #e5e7eb;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
 .page-wide__art-chip {
@@ -1413,7 +1461,7 @@
   position: relative;
   padding: 24px 18px 10px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(17, 24, 39, 0.86);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--shadow-soft);
 }
@@ -1708,6 +1756,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 48px 32px;
   margin-bottom: 48px;
+  border-top: 1px solid #2d3239;
+  padding-top: 48px;
 }
 
 .footer__column {
@@ -1757,8 +1807,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 24px;
-  border-top: 1px solid #2d3239;
 }
 
 .footer__copyright,

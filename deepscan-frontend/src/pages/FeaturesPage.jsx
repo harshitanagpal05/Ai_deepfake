@@ -24,15 +24,25 @@ export default function FeaturesPage() {
 
         <div className="page-wide__hero-art" aria-hidden="true">
           <div className="page-wide__art-card">
+            <div style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '6px', color: '#fff' }}>Upload Target</div>
+            <div style={{ fontSize: '0.85rem', color: '#a0aec0', marginBottom: '16px' }}>Ready for analysis. WEBP / PNG / JPEG</div>
             <div className="page-wide__art-line" />
             <div className="page-wide__art-line page-wide__art-line--short" />
-            <div className="page-wide__art-meter">
+            <div className="page-wide__art-meter" style={{ marginTop: '16px' }}>
               <span />
             </div>
           </div>
           <div className="page-wide__art-card page-wide__art-card--offset">
-            <div className="page-wide__art-chip">EXIF</div>
+            <div className="page-wide__art-chip" style={{ marginBottom: '12px' }}>Verdict Breakdown</div>
+            <div style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '6px', color: '#fff', display: 'flex', justifyContent: 'space-between' }}>
+              <span>AI Generated</span>
+              <span>87%</span>
+            </div>
             <div className="page-wide__art-line" />
+            <div style={{ fontSize: '0.85rem', color: '#a0aec0', marginTop: '12px', marginBottom: '6px', display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontWeight: 700 }}>Metadata Anomaly</span>
+              <span>63%</span>
+            </div>
             <div className="page-wide__art-line page-wide__art-line--short" />
           </div>
         </div>
@@ -56,12 +66,12 @@ export default function FeaturesPage() {
           <p>EXIF details (camera, software, timestamp). Missing values are flagged to highlight anomalies.</p>
         </article>
         <article className="feature-card">
-          <h2>Fast feedback</h2>
-          <p>Designed for a quick decision loop: upload → analyze → understand.</p>
+          <h2>Batch Processing</h2>
+          <p>Analyze multiple images at once to streamline your workflow and save time.</p>
         </article>
         <article className="feature-card">
-          <h2>Responsive UI</h2>
-          <p>Works cleanly on desktop and mobile with a professional, minimal interface.</p>
+          <h2>API Access</h2>
+          <p>Integrate our deepfake detection capabilities directly into your own applications seamlessly.</p>
         </article>
       </section>
     </div>

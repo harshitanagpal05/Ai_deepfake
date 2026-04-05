@@ -4,6 +4,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import HowItWorksPage from './pages/HowItWorksPage';
+import LearnMorePage from './pages/LearnMorePage';
 import FeaturesPage from './pages/FeaturesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -51,6 +52,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage isAuthed={isAuthed} />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/learn-more" element={<LearnMorePage />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
