@@ -1,22 +1,7 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Navbar({ isAuthed, userEmail, onAuthNavigate, onLogout, onGoToChecker }) {
-  const navigate = useNavigate();
-
-  const goToAnalyzer = () => {
-    if (!isAuthed) {
-      navigate('/auth', { state: { authMode: 'signin', redirectTo: '/checker' } });
-      return;
-    }
-
-    if (window.location.pathname === '/checker') {
-      document.getElementById('analyzer')?.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
-
-    navigate('/checker');
-  };
 
   return (
     <header className="navbar">
