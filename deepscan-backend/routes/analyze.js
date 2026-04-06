@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs').promises;
-const { upload, handleMulterError } = require('../middleware/fileValidator');
+const { upload, uploadVideo, handleMulterError } = require('../middleware/fileValidator');
 const { analyzeMetadata } = require('../services/metadataService');
-const { runMLModel } = require('../services/mlservice');
+const { runImageMLModel, runVideoMLModel } = require('../services/mlService');
 const { aggregateScores } = require('../services/scoreAggregator');
 const Result = require('../models/Result');
 
@@ -22,7 +22,7 @@ router.post('/analyze', upload.single('image'), async (req, res, next) => {
     // Run metadata + ML analysis in parallel
     const [metadataResult, mlResult] = await Promise.all([
       analyzeMetadata(filePath),
-      runMLModel(filePath)
+      runImageMLModel(filePath)
     ]);
 
     // Aggregate into final verdict
@@ -70,6 +70,70 @@ router.post('/analyze', upload.single('image'), async (req, res, next) => {
     fs.unlink(filePath).catch(() => { });
     console.error('❌ Analysis error:', err.message);
     return res.status(503).json({ error: 'Analysis service failed. Please try again.' });
+  }
+});
+
+// ─── POST /api/analyze-video ───────────────────────────────────────────────
+router.post('/analyze-video', uploadVideo.single('video'), async (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No video file provided.' });
+  }
+
+  const filePath = req.file.path;
+
+  try {
+    console.log('📂 Video received:', req.file.filename);
+
+    const mlResult = await runVideoMLModel(filePath);
+
+    // Provide a neutral metadata score for videos as EXIF doesn't apply cleanly
+    const metadataResult = {
+      metadata_score: 50,
+      flags: ['Video metadata check skipped'],
+      raw: null
+    };
+
+    const result = aggregateScores(
+      metadataResult.metadata_score,
+      mlResult.model_score,
+      mlResult.artifact_score
+    );
+
+    const savedResult = await Result.create({
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      final_score: result.final_score,
+      verdict: result.verdict,
+      confidence: result.confidence,
+      breakdown: result.breakdown,
+      flags: metadataResult.flags,
+      raw_metadata: metadataResult.raw
+    });
+
+    console.log('💾 Saved video result to DB:', savedResult._id);
+
+    fs.unlink(filePath)
+      .then(() => console.log('🗑️  Temp video file deleted'))
+      .catch((e) => console.warn('⚠️  Could not delete temp video:', e.message));
+
+    return res.status(200).json({
+      message: 'Video analysis complete',
+      id: savedResult._id,
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      final_score: result.final_score,
+      verdict: result.verdict,
+      confidence: result.confidence,
+      breakdown: result.breakdown,
+      flags: metadataResult.flags,
+      raw_metadata: metadataResult.raw,
+      analyzed_at: savedResult.analyzed_at
+    });
+
+  } catch (err) {
+    fs.unlink(filePath).catch(() => { });
+    console.error('❌ Video Analysis error:', err.message);
+    return res.status(503).json({ error: 'Video analysis service failed. Please try again.' });
   }
 });
 

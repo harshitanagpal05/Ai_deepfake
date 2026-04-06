@@ -15,3 +15,10 @@ npm-debug.log*
 
 # Documentation
 README.md
+
+# ML Models (Mounted via volume, prevent huge context transfer)
+trained_models/
+trained_models
+ml_service/venv/
+ml_service/venv
+ml_service/__pycache__/

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { analyzeImage } from '../services/api';
+import { analyzeMedia } from '../services/api';
 import ResultCard from './ResultCard';
 import MetadataPanel from './MetadataPanel';
 
@@ -52,7 +52,7 @@ export default function UploadZone({ id }) {
     // TODO: Update backend call or parameters to process video/description if needed.
     // We pass `description` if the API requires it, for now we just keep the form state as requested.
     try {
-      const data = await analyzeImage(file);
+      const data = await analyzeMedia(file);
       setResult(data);
     } catch (err) {
       const serverMessage = err?.response?.data?.error || err?.response?.data?.message;

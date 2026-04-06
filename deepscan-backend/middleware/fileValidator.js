@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
   }
 });
 
-// ─── File Filter ───────────────────────────────────────────────────────────
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const fileFilter = (req, file, cb) => {
@@ -27,11 +26,28 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// ─── Multer Instance ───────────────────────────────────────────────────────
+// ─── Video File Filter ─────────────────────────────────────────────────────
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+
+const videoFileFilter = (req, file, cb) => {
+  if (ALLOWED_VIDEO_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only MP4, WEBM, AVI, and MOV videos are allowed'), false);
+  }
+};
+
+// ─── Multer Instances ──────────────────────────────────────────────────────
 const upload = multer({
   storage,
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5 MB
+});
+
+const uploadVideo = multer({
+  storage,
+  fileFilter: videoFileFilter,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
 });
 
 // ─── Shared Multer Error Handler ───────────────────────────────────────────
@@ -49,4 +65,4 @@ const handleMulterError = (err, req, res, next) => {
   next();
 };
 
-module.exports = { upload, handleMulterError };
+module.exports = { upload, uploadVideo, handleMulterError };
