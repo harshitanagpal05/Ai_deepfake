@@ -20,10 +20,12 @@ const runImageMLModel = async (imagePath) => {
         }
     } catch (err) {
         console.error('❌ ML Service Image Error:', err.message);
+        // ✅ Better — caller can distinguish error from genuine uncertainty
         return {
-            model_score: 50,
-            artifact_score: 50,
-            status: 'error'
+            model_score: null,
+            artifact_score: null,
+            status: 'error',
+            reason: err.message
         };
     }
 };
