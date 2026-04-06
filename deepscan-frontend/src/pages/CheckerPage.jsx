@@ -7,8 +7,8 @@ export default function CheckerPage() {
       <div className="app__hero">
         <h1 className="page__title--glow">AI Image Authenticity Check</h1>
         <p>
-          Upload a single image and get a probability score based on model, artifact, and metadata
-          analysis.
+          Upload an image or video and get a deepfake probability score based on deep learning model
+          and metadata analysis.
         </p>
       </div>
       <UploadZone id="analyzer" />
