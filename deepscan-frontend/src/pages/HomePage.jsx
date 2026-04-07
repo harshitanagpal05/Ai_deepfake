@@ -68,40 +68,48 @@ export default function HomePage({ isAuthed }) {
                   <span className="landing__list-label">🛡️ Images Scanned</span>
                   <span className="landing__list-value"><CountUp end={1248390} /></span>
                 </div>
+                <div className="landing__list-item">
+                  <span className="landing__list-label">⚡ Avg Speed</span>
+                  <span className="landing__list-value" style={{ color: 'var(--orange)' }}>&lt;2s</span>
+                </div>
+                <div className="landing__list-item">
+                  <span className="landing__list-label">🎯 Accuracy</span>
+                  <span className="landing__list-value" style={{ color: 'var(--gold)' }}>99.2%</span>
+                </div>
               </div>
             </div>
-            
+
             <div className="landing__panel landing__panel--dark">
               <div className="landing__panel-chip">Authenticity</div>
-              
+
               <div className="landing__progress">
                 <div className="landing__progress-row">
                   <div className="landing__progress-label">
                     <span>AI Generated</span>
-                    <span>87%</span>
+                    <span style={{ color: 'var(--red)' }}>87%</span>
                   </div>
                   <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '87%', background: '#ef4444' }} />
+                    <div className="landing__progress-fill" style={{ '--w': '87%', background: 'var(--red)' }} />
                   </div>
                 </div>
 
                 <div className="landing__progress-row">
                   <div className="landing__progress-label">
                     <span>Metadata Anomaly</span>
-                    <span>63%</span>
+                    <span style={{ color: 'var(--orange)' }}>63%</span>
                   </div>
                   <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '63%', background: '#f97316' }} />
+                    <div className="landing__progress-fill" style={{ '--w': '63%', background: 'var(--orange)' }} />
                   </div>
                 </div>
 
                 <div className="landing__progress-row">
                   <div className="landing__progress-label">
                     <span>Real / Authentic</span>
-                    <span>12%</span>
+                    <span style={{ color: 'var(--gold)' }}>12%</span>
                   </div>
                   <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '12%', background: '#10b981' }} />
+                    <div className="landing__progress-fill" style={{ '--w': '12%', background: 'var(--gold)' }} />
                   </div>
                 </div>
               </div>
