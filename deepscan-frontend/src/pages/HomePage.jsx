@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AnimatedTitle from '../components/AnimatedTitle';
-import HeroOrb from '../components/HeroOrb';
+import ScannerVisual from '../components/ScannerVisual';
 import FeatureCardComponent from '../components/FeatureCardComponent';
 import CountUp from '../components/CountUp';
 import '../components/HeroCards.css';
+import '../components/ScannerVisual.css';
 
 export default function HomePage({ isAuthed }) {
   const location = useLocation();
@@ -28,99 +29,64 @@ export default function HomePage({ isAuthed }) {
   };
 
   return (
-    <>
+    <div className="home-v2">
       <section className="landing">
-        <div className="landing__hero">
-          <HeroOrb />
+        <div className="landing__hero custom-layout">
           <div className="landing__left">
-            <AnimatedTitle
-              eyebrow="AI Deepfake"
-              firstLine="Building"
-              secondLine="trust online"
-              subtitle="AI Deepfake Detection Platform — detect AI-generated images in seconds."
-            />
+            <div className="kicker-tag">
+              <span className="dot"></span>
+              Plus Jakustrial
+            </div>
+            <h1 className="landing__main-title">
+              Deepfake <br />
+              <span>Detection.</span>
+            </h1>
+            <p className="landing__subtext">
+              Our Analysis Vault uses state-of-the-art neural networks to scan and verify 
+              media authenticity with 99.2% accuracy.
+            </p>
 
             <div className="landing__cta">
-              <button type="button" className="landing__btn landing__btn--primary stagger-slide-up delay-btn-1" onClick={handleStart}>
-                {isAuthed ? 'Open checker' : 'Sign in to start'}
+              <button type="button" className="landing__btn-v2 primary" onClick={handleStart}>
+                {isAuthed ? 'Open Vault' : 'Initialize Scan'}
               </button>
               <button
                 type="button"
-                className="landing__btn landing__btn--secondary stagger-slide-up delay-btn-2"
-                onClick={() => navigate('/auth', { state: { authMode: 'signup', redirectTo: '/checker' } })}
+                className="landing__btn-v2 secondary"
+                onClick={() => navigate('/learn-more')}
               >
-                Create account
+                Learn More
               </button>
             </div>
 
-            <div className="landing__mini">
-              <FeatureCardComponent index={0} title="Upload" subtitle="JPEG / PNG / WEBP (up to 5MB)" />
-              <FeatureCardComponent index={1} title="Analyze" subtitle="Artifacts + EXIF metadata signals" />
-              <FeatureCardComponent index={2} title="Verify" subtitle="Score + verdict with breakdown" />
+            <div className="landing__tech-stats">
+              <div className="tech-stat-item">
+                <span className="label">Scanned</span>
+                <span className="value"><CountUp end={1248390} /></span>
+              </div>
+              <div className="tech-stat-item">
+                <span className="label">Status</span>
+                <span className="value active">Online</span>
+              </div>
             </div>
           </div>
 
-          <aside className="landing__right" aria-label="Preview cards">
-            <div className="landing__panel landing__panel--light">
-              <div className="landing__panel-chip">Overview</div>
-              <div className="landing__list">
-                <div className="landing__list-item">
-                  <span className="landing__list-label">🛡️ Images Scanned</span>
-                  <span className="landing__list-value"><CountUp end={1248390} /></span>
-                </div>
-                <div className="landing__list-item">
-                  <span className="landing__list-label">⚡ Avg Speed</span>
-                  <span className="landing__list-value" style={{ color: 'var(--orange)' }}>&lt;2s</span>
-                </div>
-                <div className="landing__list-item">
-                  <span className="landing__list-label">🎯 Accuracy</span>
-                  <span className="landing__list-value" style={{ color: 'var(--gold)' }}>99.2%</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="landing__panel landing__panel--dark">
-              <div className="landing__panel-chip">Authenticity</div>
-
-              <div className="landing__progress">
-                <div className="landing__progress-row">
-                  <div className="landing__progress-label">
-                    <span>AI Generated</span>
-                    <span style={{ color: 'var(--red)' }}>87%</span>
-                  </div>
-                  <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '87%', background: 'var(--red)' }} />
-                  </div>
-                </div>
-
-                <div className="landing__progress-row">
-                  <div className="landing__progress-label">
-                    <span>Metadata Anomaly</span>
-                    <span style={{ color: 'var(--orange)' }}>63%</span>
-                  </div>
-                  <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '63%', background: 'var(--orange)' }} />
-                  </div>
-                </div>
-
-                <div className="landing__progress-row">
-                  <div className="landing__progress-label">
-                    <span>Real / Authentic</span>
-                    <span style={{ color: 'var(--gold)' }}>12%</span>
-                  </div>
-                  <div className="landing__progress-bg">
-                    <div className="landing__progress-fill" style={{ '--w': '12%', background: 'var(--gold)' }} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="landing__badge">
-                ⚠️ LIKELY DEEPFAKE
-              </div>
-            </div>
-          </aside>
+          <div className="landing__right visual-container">
+            <ScannerVisual />
+          </div>
         </div>
       </section>
-    </>
+
+      <section className="features-brief">
+        <div className="section-header">
+           <h2 className="section-title">Core Engine <span>Signals</span></h2>
+        </div>
+        <div className="landing__mini">
+          <FeatureCardComponent index={0} title="Neural Scan" subtitle="Pixel-level artifact detection" />
+          <FeatureCardComponent index={1} title="EXIF Vault" subtitle="Metadata signal verification" />
+          <FeatureCardComponent index={2} title="Verdict" subtitle="Binary classification results" />
+        </div>
+      </section>
+    </div>
   );
 }

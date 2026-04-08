@@ -1,62 +1,77 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const TECH_BLOCKS = [
+  {
+    id: '01',
+    category: 'Core AI',
+    title: 'Model Signal Processor',
+    desc: 'Deep neural network trained on millions of authentic and synthetic pairs to identify generational artifacts in latent space.',
+    metrics: ['99.2% Base Accuracy', 'Pixel-wise Analysis', 'Low-latency Inference']
+  },
+  {
+    id: '02',
+    category: 'Signal',
+    title: 'Artifact Detection',
+    desc: 'Analyzes texture frequencies and boundary inconsistencies often found in GAN/Diffusion generated outputs.',
+    metrics: ['Texture Discontinuity', 'Shadow Anomaly', 'Blur Distribution']
+  },
+  {
+    id: '03',
+    category: 'Registry',
+    title: 'Metadata Vault',
+    desc: 'Cross-checks EXIF data against hardware signatures and known tool footprints to flag digital manipulation.',
+    metrics: ['Hardware Signature', 'Signature Hash', 'Timestamp Chain']
+  }
+];
+
 export default function LearnMorePage() {
   return (
-    <div className="how">
-      <header className="how__hero">
-        <div className="how__hero-copy">
-          <p className="how__kicker">Learn More</p>
-          <h1 className="how__title">Technology & Signal Types</h1>
-          <p className="how__subtitle">
-            AI Deepfake uses advanced machine learning models, artifacts analysis, and metadata verification to detect AI-generated content. Discover how our technology works.
-          </p>
-          <div className="how__cta-row">
-            <Link to="/" className="how__btn how__btn--primary">Try it now</Link>
-            <Link to="/features" className="how__btn how__btn--secondary">Explore features</Link>
-          </div>
-        </div>
+    <div className="learn-v2">
+      <header className="learn-v2__header">
+        <div className="learn-v2__kicker">Diagnostic / Architecture</div>
+        <h1 className="learn-v2__title">System <span>Blueprint</span></h1>
+        <p className="learn-v2__subtitle">
+          A modular approach to media verification. AI Deepfake combines three distinct 
+          signal layers to produce a unified authenticity score.
+        </p>
       </header>
 
-      <section className="how__steps" aria-label="Technology Details">
-        <article className="how-step">
-          <div className="how-step__num">01</div>
-          <div className="how-step__body">
-            <h2>Model Analysis</h2>
-            <p>Our machine learning models are trained to identify deep-level AI patterns and anomalies in pixel distributions that are typical of generative AI.</p>
-          </div>
-        </article>
-        <article className="how-step">
-          <div className="how-step__num">02</div>
-          <div className="how-step__body">
-            <h2>Artifacts Detection</h2>
-            <p>We check for visual artifacts, texture inconsistencies, and edge blending issues often left behind by AI generators.</p>
-          </div>
-        </article>
-        <article className="how-step">
-          <div className="how-step__num">03</div>
-          <div className="how-step__body">
-            <h2>Metadata Verification</h2>
-            <p>The system inspects EXIF data for mismatched tool signatures, missing standard timestamps, and other digital footprint anomalies.</p>
-          </div>
-        </article>
-        <article className="how-step how-step--wide">
-          <div className="how-step__num">04</div>
-          <div className="how-step__body">
-            <h2>Use Cases</h2>
-            <div className="how-step__cols">
-              <div>
-                <h3>For Media & Journalism</h3>
-                <p>Verify user-generated content before publication to maintain journalistic integrity and combat misinformation.</p>
-              </div>
-              <div>
-                <h3>For Enterprises</h3>
-                <p>Protect against synthetic identity fraud, deepfake impersonations, and manipulated documents.</p>
-              </div>
+      <section className="learn-v2__architecture">
+        {TECH_BLOCKS.map((block) => (
+          <div key={block.id} className="tech-module">
+            <div className="tech-module__header">
+              <span className="tech-module__num">{block.id}</span>
+              <span className="tech-module__cat">{block.category}</span>
             </div>
+            <h2 className="tech-module__title">{block.title}</h2>
+            <p className="tech-module__desc">{block.desc}</p>
+            <div className="tech-module__metrics">
+              {block.metrics.map((m, i) => (
+                <div key={i} className="tech-metric">
+                  <span className="tech-metric__dot"></span>
+                  {m}
+                </div>
+              ))}
+            </div>
+            {/* Visual connector line */}
+            <div className="tech-module__connector"></div>
           </div>
-        </article>
+        ))}
+
+        {/* Central aggregator visual side-piece */}
+        <div className="aggregator-core">
+          <div className="aggregator-core__box">
+            <div className="aggregator-core__logo">🔥</div>
+            <div className="aggregator-core__label">Aggregator Core</div>
+            <div className="aggregator-core__pulse"></div>
+          </div>
+        </div>
       </section>
+
+      <div className="learn-v2__footer">
+        <Link to="/" className="landing__btn-v2 primary">Try Detection Vault</Link>
+      </div>
     </div>
   );
 }

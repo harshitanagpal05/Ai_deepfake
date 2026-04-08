@@ -1,16 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const STATS = [
+  { num: '3-Part', label: 'Signal Set', sub: 'model • artifacts • metadata' },
+  { num: '0–100%', label: 'Output Score', sub: 'probability-style result' },
+  { num: '99.2%', label: 'Accuracy', sub: 'on benchmark datasets' },
+];
+
+const PRIORITIES = [
+  { title: 'Readable results', body: 'Verdict + confidence meter + breakdown so the score is explainable, not a black box.' },
+  { title: 'Practical signals', body: 'We surface what\'s most useful: artifacts and metadata anomalies alongside model signals.' },
+  { title: 'Privacy minded', body: 'Your uploads are used for analysis only. We do not sell, share, or retain your data.' },
+];
+
 export default function AboutPage() {
   return (
-    <div className="about">
-      <header className="about__hero">
-        <div className="about__hero-left">
-          <p className="about__kicker">AI Deepfake</p>
+    <div className="about-page">
+
+      {/* Band 1 — Hero split */}
+      <div className="about-band about-band--hero">
+        <div>
+          <p className="about__kicker">✦ AI Deepfake</p>
           <h1 className="about__title">Built for clarity in an AI-heavy world</h1>
           <p className="about__subtitle">
-            AI Deepfake Detection Platform. AI Deepfake helps you make faster, more informed decisions by
-            turning complex signals into a readable score and breakdown.
+            AI Deepfake Detection Platform helps you make faster, more informed decisions
+            by turning complex signals into a readable score and breakdown.
           </p>
           <div className="about__hero-actions">
             <Link to="/" className="about__btn about__btn--primary">Try AI Deepfake</Link>
@@ -18,43 +32,47 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="about__hero-right" aria-hidden="true">
-          <div className="about__stat">
+        <div className="about__hero-right">
+          <div className="about__stat-side">
             <div className="about__stat-label">Signal set</div>
             <div className="about__stat-value">3-part</div>
-            <div className="about__stat-sub">model • artifacts • metadata</div>
+            <div className="about__stat-sub">model · artifacts · metadata</div>
           </div>
-          <div className="about__stat about__stat--muted">
+          <div className="about__stat-side">
             <div className="about__stat-label">Output</div>
             <div className="about__stat-value">0–100%</div>
             <div className="about__stat-sub">probability-style score</div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <section className="about__timeline" aria-label="What we prioritize">
-        <div className="about__timeline-item">
-          <div className="about__dot" />
-          <div className="about__timeline-body">
-            <h2>Readable results</h2>
-            <p>Verdict + confidence meter + breakdown so the score is explainable.</p>
+      {/* Band 2 — Stats row */}
+      <div className="about-band about-band--stats">
+        {STATS.map((s, i) => (
+          <div key={i} className="about-stat-card">
+            <div className="about-stat-num">{s.num}</div>
+            <div className="about-stat-label" style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: 6 }}>{s.label}</div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--faint)', marginTop: 2 }}>{s.sub}</div>
           </div>
+        ))}
+      </div>
+
+      {/* Band 3 — Timeline priorities */}
+      <div className="about-band about-band--timeline">
+        <p style={{ fontSize: '0.72rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: 28 }}>
+          What we prioritize
+        </p>
+        <div className="about__timeline-grid">
+          {PRIORITIES.map((p, i) => (
+            <div key={i} className="about__tl-item">
+              <div className="about__tl-num">0{i + 1}</div>
+              <h2 className="about__tl-title">{p.title}</h2>
+              <p className="about__tl-body">{p.body}</p>
+            </div>
+          ))}
         </div>
-        <div className="about__timeline-item">
-          <div className="about__dot" />
-          <div className="about__timeline-body">
-            <h2>Practical signals</h2>
-            <p>We surface what’s most useful: artifacts and metadata anomalies alongside model signals.</p>
-          </div>
-        </div>
-        <div className="about__timeline-item">
-          <div className="about__dot" />
-          <div className="about__timeline-body">
-            <h2>Privacy minded</h2>
-            <p>Your uploads are used for analysis. We don’t sell or share your data.</p>
-          </div>
-        </div>
-      </section>
+      </div>
+
     </div>
   );
 }

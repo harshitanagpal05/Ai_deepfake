@@ -1,0 +1,300 @@
+.scanner-vault {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* TOP SMALL PANEL */
+.scanner-vault__top-panel {
+  position: absolute;
+  top: -30px;
+  left: 20px;
+  width: 320px;
+  background: #18191c;
+  border: 1px solid #282a2f;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  padding: 16px;
+}
+
+.scanner-vault__header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.scanner-vault__logo-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: #25262a;
+  border-radius: 6px;
+  position: relative;
+}
+.scanner-vault__logo-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 8px; height: 8px;
+  background: #ff3131;
+  box-shadow: 0 0 10px rgba(255, 49, 49, 0.6);
+}
+
+.scanner-vault__lines {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  padding: 0 16px;
+}
+.scanner-vault__lines span {
+  height: 4px;
+  background: #26272b;
+  border-radius: 4px;
+  width: 20px;
+}
+.scanner-vault__lines span.long { width: 40px; }
+.scanner-vault__lines span.med { width: 30px; }
+.scanner-vault__lines span.short { width: 14px; }
+
+.scanner-vault__close-btn {
+  width: 30px; height: 16px;
+  background: #ff3131;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(255, 49, 49, 0.4);
+}
+
+.scanner-vault__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scanner-vault__label {
+  font-size: 0.65rem;
+  color: #ff3131;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.scanner-vault__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.scanner-vault__title span { display: block; color: #a0a3ab; }
+
+.scanner-vault__desc-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.scanner-vault__desc-lines span {
+  display: block;
+  height: 4px;
+  background: #26272b;
+  border-radius: 4px;
+  width: 80%;
+}
+.scanner-vault__btn {
+  width: 60px; height: 16px;
+  border: 1px solid #ff3131;
+  border-radius: 4px;
+  box-shadow: inset 0 0 8px rgba(255, 49, 49, 0.2);
+}
+
+.scanner-vault__scan-box-small {
+  width: 100px; height: 100px;
+  background: #0d0d0f;
+  border-radius: 8px;
+  border: 1px solid #202125;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.scanner-vault__scan-head-shadow {
+  width: 60px; height: 80px;
+  background: #1a1b1f;
+  border-radius: 40px 40px 10px 10px;
+  position: absolute;
+  bottom: -10px;
+}
+
+.scanner-vault__scan-reticle {
+  width: 24px; height: 24px;
+  border: 1px solid #ff3131;
+  border-radius: 4px;
+  position: absolute;
+  box-shadow: inset 0 0 10px rgba(255, 49, 49, 0.4), 0 0 10px rgba(255, 49, 49, 0.4);
+}
+.scanner-vault__scan-reticle::after {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 6px; height: 6px; background: #ff3131; border-radius: 50%;
+}
+
+/* MAIN PANEL */
+.scanner-vault__main-panel {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 520px;
+  background: #18191c;
+  border: 1px solid #2d2f34;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  z-index: 2;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.scanner-vault__outline-btn {
+  width: 60px; height: 20px;
+  border: 1px solid #3d3f46;
+  border-radius: 6px;
+}
+
+.scanner-vault__panel-body {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 3;
+}
+
+.scanner-vault__body-left {
+  flex: 1;
+  padding-top: 10px;
+}
+
+.scanner-vault__main-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+.scanner-vault__main-title span.red-dot {
+  color: #ff3131;
+}
+
+.scanner-vault__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.scanner-vault__action-btn {
+  height: 24px; border-radius: 6px;
+}
+.scanner-vault__action-btn.primary {
+  width: 80px; border: 1px solid #ff3131; box-shadow: inset 0 0 12px rgba(255, 49, 49, 0.2);
+}
+.scanner-vault__action-btn.outline {
+  width: 60px; border: 1px solid #3d3f46;
+}
+
+/* MONITOR SCANNER */
+.scanner-vault__body-right {
+  width: 240px;
+}
+
+.scanner-vault__monitor {
+  background: #0d0d0f;
+  border: 1px solid #2a2b30;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.scanner-vault__monitor::before {
+  content: '...';
+  position: absolute; top: -14px; right: 10px;
+  color: #a0a3ab; font-weight: bold; letter-spacing: 2px;
+}
+.scanner-vault__monitor::after {
+  content: '';
+  position: absolute; top: -10px; left: 10px;
+  width: 20px; height: 4px; background: #26272b; border-radius: 2px;
+}
+
+.scanner-vault__monitor-inner {
+  background: #000;
+  height: 150px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #1a1a1c;
+}
+
+.scanner-vault__face-silhouette {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 110px;
+  background: #111;
+  border-radius: 50px 50px 10px 10px;
+  box-shadow: 0 -20px 40px rgba(255, 49, 49, 0.15);
+}
+
+.scanner-vault__monitor-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 49, 49, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 49, 49, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 2;
+}
+
+.scanner-vault__laser-line {
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 2px;
+  background: #ff3131;
+  box-shadow: 0 0 20px 4px rgba(255, 49, 49, 0.6);
+  z-index: 3;
+  animation: scanScan 3s linear infinite alternate;
+}
+
+@keyframes scanScan {
+  0% { top: 10%; }
+  100% { top: 90%; }
+}
+
+/* PCB TECH LINES */
+.scanner-vault__tech-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scanner-vault__tech-lines::before {
+  content: '';
+  position: absolute;
+  bottom: 20px; left: 20px;
+  width: 140px; height: 100px;
+  border-bottom: 1px solid #2d2f34;
+  border-left: 1px solid #2d2f34;
+}
+
+.scanner-vault__tech-lines::after {
+  content: '';
+  position: absolute;
+  top: 30px; right: 80px;
+  width: 100px; height: 80px;
+  border-top: 1px solid #2d2f34;
+  border-right: 1px solid #2d2f34;
+}
+

@@ -1,63 +1,63 @@
-
 /* OVERVIEW CARD LIST */
 .landing__list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 4px;
+  margin-top: 10px;
 }
+
 .landing__list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,100,60,0.1);
 }
-.landing__list-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
+
+.landing__list-item:last-child { border-bottom: none; }
+
 .landing__list-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: #a0aec0;
-  font-weight: 600;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-weight: 500;
 }
+
 .landing__list-value {
   font-weight: 700;
-  font-size: 0.95rem;
-  color: #ffffff;
+  font-size: 1rem;
+  color: #fff;
 }
 
 /* AUTHENTICITY CARD BARS */
-.landing__progress-row {
-  margin-bottom: 16px;
-}
-.landing__progress-row:last-child {
-  margin-bottom: 0;
-}
+.landing__progress-row { margin-bottom: 14px; }
+.landing__progress-row:last-child { margin-bottom: 0; }
+
 .landing__progress-label {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.82rem;
+  color: var(--muted);
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 500;
 }
+
 .landing__progress-bg {
   width: 100%;
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--r-pill);
   overflow: hidden;
 }
+
 .landing__progress-fill {
   height: 100%;
-  border-radius: 999px;
-  animation: fillBar 1s ease-out forwards;
+  border-radius: var(--r-pill);
+  animation: fillBar 1.3s cubic-bezier(0.65,0,0.35,1) forwards;
   width: 0;
+  box-shadow: 0 0 8px rgba(232,52,26,0.4);
 }
 
 @keyframes fillBar {
@@ -68,22 +68,23 @@
 /* LIKELY DEEPFAKE BADGE */
 .landing__badge {
   display: inline-block;
-  margin-top: 20px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.5);
-  color: #fca5a5;
-  font-size: 0.75rem;
+  margin-top: 18px;
+  padding: 10px 18px;
+  border-radius: var(--r-md);
+  background: rgba(232,52,26,0.12);
+  border: 1px solid rgba(232,52,26,0.35);
+  color: var(--coral);
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
-  animation: pulseBadge 3s infinite;
+  letter-spacing: 0.12em;
+  animation: pulseBadge 3s ease-in-out infinite;
   text-align: center;
   width: 100%;
+  text-transform: uppercase;
 }
 
 @keyframes pulseBadge {
-  0% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
-  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
-  100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+  0%   { box-shadow: 0 0 0px rgba(232,52,26,0.3); }
+  50%  { box-shadow: 0 0 18px rgba(232,52,26,0.55); }
+  100% { box-shadow: 0 0 0px rgba(232,52,26,0.3); }
 }

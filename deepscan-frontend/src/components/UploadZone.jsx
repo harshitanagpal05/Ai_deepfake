@@ -110,7 +110,7 @@ export default function UploadZone({ id }) {
         )}
 
         <div className="upload-zone__description-wrapper" style={{ marginTop: '24px' }}>
-          <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0aec0', marginBottom: '8px', fontWeight: '600' }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--muted)', marginBottom: '8px', fontWeight: '600' }}>
             Add a description (optional)
           </label>
           <textarea
@@ -122,10 +122,10 @@ export default function UploadZone({ id }) {
               width: '100%',
               minHeight: '80px',
               padding: '12px 14px',
-              borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#fff',
+              borderRadius: 'var(--r-md)',
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--border2)',
+              color: 'var(--text)',
               fontSize: '0.95rem',
               fontFamily: 'inherit',
               resize: 'vertical',

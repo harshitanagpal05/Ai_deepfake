@@ -49,15 +49,21 @@ export default function FeatureCardComponent({ title, subtitle, index }) {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="landing__mini-card feature-card-interactive"
+        className="feature-card-interactive"
         style={{
-          transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale(${
-            rotation.x !== 0 || rotation.y !== 0 ? 1.05 : 1
+          transform: `perspective(1000px) rotateX(${rotation.x * 0.2}deg) rotateY(${rotation.y * 0.2}deg) scale(${
+            rotation.x !== 0 || rotation.y !== 0 ? 1.02 : 1
           })`,
         }}
       >
-        <div className="landing__mini-title">{title}</div>
-        <div className="landing__mini-sub">{subtitle}</div>
+        <div className="feature-card__content">
+          <div className="feature-card__title">{title}</div>
+          <div className="feature-card__subtitle">{subtitle}</div>
+        </div>
+        <div className="feature-card__status">
+          <span className="dot"></span>
+          Active
+        </div>
       </div>
     </div>
   );
