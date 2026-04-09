@@ -31,10 +31,10 @@ img { max-width: 100%; display: block; }
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #000000; }
-::-webkit-scrollbar-thumb { background: rgba(255, 31, 31, 0.4); border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 31, 31, 0.6); }
+::-webkit-scrollbar-thumb { background: var(--primary-glow); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-::selection { background: rgba(255, 31, 31, 0.35); color: #fff; }
+::selection { background: var(--primary-glow); color: #fff; }
 
 .texture-overlay {
   position: fixed;

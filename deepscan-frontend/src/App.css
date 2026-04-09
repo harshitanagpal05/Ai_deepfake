@@ -50,7 +50,7 @@
   --grad-vibrant: linear-gradient(135deg, #10B981 0%, #D9C8A9 100%);
 
   /* Shadows */
-  --shadow-fire:  0 10px 40px rgba(255, 31, 31, 0.4);
+  --shadow-fire:  0 10px 40px var(--primary-glow);
   --shadow-cyan:  0 10px 40px rgba(255, 255, 255, 0.3);
   --shadow-card:  0 20px 60px rgba(0, 0, 0, 0.8);
   --shadow-soft:  0 4px 20px rgba(0, 0, 0, 0.5);
@@ -96,8 +96,8 @@ body {
   content: '';
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 31, 31, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 31, 31, 0.03) 1px, transparent 1px);
+    linear-gradient(var(--primary-dim) 1px, transparent 1px),
+    linear-gradient(90deg, var(--primary-dim) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 

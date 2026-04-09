@@ -4,7 +4,7 @@ const FormData = require('form-data');
 const path = require('path');
 
 // --- Config -----------------------------------------------------------------
-const IMAGE_SERVER_URL = process.env.IMAGE_SERVER_URL || 'http://127.0.0.1:7000';
+const IMAGE_SERVER_URL = process.env.FLASK_ML_URL || 'http://127.0.0.1:5001';
 
 function parseTimeoutMs(value, fallback) {
   const n = Number.parseInt(String(value ?? ''), 10);
@@ -33,40 +33,30 @@ const detectMediaType = (filePath, mimeType) => {
 };
 
 const runImageModel = async (filePath) => {
-  const form = new FormData();
-  form.append('file', fs.createReadStream(filePath));
-
   try {
     const response = await axios.post(
-      `${IMAGE_SERVER_URL}/predict/image`,
-      form,
+      `${IMAGE_SERVER_URL}/predict-image`,
+      { filepath: path.resolve(filePath) },
       {
-        headers: form.getHeaders(),
         timeout: IMAGE_PREDICT_TIMEOUT_MS,
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
       }
     );
 
-    const { prediction, confidence, deepfake_probability: deepfakeProbabilityRaw } = response.data || {};
-    const c = Number(confidence);
-    if (!['real', 'deepfake'].includes(prediction) || !Number.isFinite(c)) {
-      throw new Error('Invalid image prediction response from model server');
+    const { model_score, artifact_score } = response.data || {};
+    const score = Number(model_score ?? artifact_score);
+
+    if (!Number.isFinite(score)) {
+      throw new Error(`Invalid ML response: ${JSON.stringify(response.data)}`);
     }
 
-    const serverDeepfakeProb = Number(deepfakeProbabilityRaw);
-    const deepfakeProb = Number.isFinite(serverDeepfakeProb)
-      ? serverDeepfakeProb
-      : (prediction === 'deepfake' ? c : 1 - c);
-    const boundedDeepfakeProb = Math.min(1, Math.max(0, deepfakeProb));
+    // Backend logic: Score >= 50 is deepfake
+    const prediction = score >= 50 ? 'deepfake' : 'real';
+    const confidence = score / 100;
 
     return {
       prediction,
-      // Keep confidence aligned with AI/deepfake probability used for scoring.
-      confidence: boundedDeepfakeProb,
-      prediction_confidence: c,
-      deepfake_probability: boundedDeepfakeProb,
-      model_score: Number((boundedDeepfakeProb * 100).toFixed(2)),
+      confidence,
+      model_score: score,
       status: 'success',
       media_type: 'image',
     };
@@ -80,53 +70,30 @@ const runImageModel = async (filePath) => {
 };
 
 const runVideoModel = async (filePath) => {
-  const form = new FormData();
-  form.append('file', fs.createReadStream(filePath));
-
   try {
     const response = await axios.post(
-      `${IMAGE_SERVER_URL}/predict/video-as-image`,
-      form,
+      `${IMAGE_SERVER_URL}/predict-video`,
+      { filepath: path.resolve(filePath) },
       {
-        headers: form.getHeaders(),
         timeout: VIDEO_PREDICT_TIMEOUT_MS,
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
       }
     );
 
-    const {
-      status,
-      frames_analyzed,
-      sampled_second,
-      sampled_frame_index,
-      prediction,
-      confidence,
-      deepfake_probability: deepfakeProbabilityRaw,
-    } = response.data;
-    const c = Number(confidence);
-    if (!['real', 'deepfake'].includes(prediction) || !Number.isFinite(c)) {
-      throw new Error('Invalid video-as-image prediction response from model server');
+    const { model_score, artifact_score } = response.data || {};
+    const score = Number(model_score ?? artifact_score);
+
+    if (!Number.isFinite(score)) {
+      throw new Error(`Invalid ML response: ${JSON.stringify(response.data)}`);
     }
 
-    const serverDeepfakeProb = Number(deepfakeProbabilityRaw);
-    const deepfakeProb = Number.isFinite(serverDeepfakeProb)
-      ? serverDeepfakeProb
-      : (prediction === 'deepfake' ? c : 1 - c);
-    const boundedDeepfakeProb = Math.min(1, Math.max(0, deepfakeProb));
+    const prediction = score >= 50 ? 'deepfake' : 'real';
 
     return {
-      model_score: Number((boundedDeepfakeProb * 100).toFixed(2)),
+      model_score: score,
       prediction,
-      confidence: boundedDeepfakeProb,
-      prediction_confidence: c,
-      deepfake_probability: boundedDeepfakeProb,
-      status: status || 'success',
+      confidence: score / 100,
+      status: 'success',
       media_type: 'video',
-      frames_analyzed: frames_analyzed || 1,
-      sampled_second: Number(sampled_second),
-      sampled_frame_index: Number(sampled_frame_index),
-      calibration_source: 'image_model_video_as_image',
     };
   } catch (err) {
     console.error('Video ML Service Error:', err.message);
