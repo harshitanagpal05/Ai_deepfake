@@ -1,5 +1,0 @@
-tensorflow==2.16.1
-opencv-python==4.8.1.78
-Flask==3.0.0
-Werkzeug==3.0.1
-h5py==3.10.0

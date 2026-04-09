@@ -16,6 +16,6 @@ COPY . .
 # Ensure directory structure for local paths in image_server.py
 RUN mkdir -p /app/trained_models
 
-EXPOSE 7000
+EXPOSE 7860
 
 CMD ["python", "image_server.py"]

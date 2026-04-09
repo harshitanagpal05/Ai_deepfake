@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+// Use relative roads in production so Vercel rewrites work automatically
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 export async function analyzeImage(file, description = '') {
   const formData = new FormData();

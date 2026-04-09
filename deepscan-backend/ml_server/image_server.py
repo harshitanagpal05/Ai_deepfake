@@ -28,7 +28,8 @@ from pytorchcv.model_provider import get_model as ptcv_get_model
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 # In Docker, the volumes are mounted at these absolute paths
-TRAINED_MODELS_DIR = "/app/trained_models"
+# Relative path is safer for Hugging Face/Docker relative uploads
+TRAINED_MODELS_DIR = os.path.join(os.path.dirname(__file__), "trained_models")
 _IMAGE_SUBDIR = "image_prediction_model"
 IMAGE_MODELS_DIR = os.path.join(TRAINED_MODELS_DIR, _IMAGE_SUBDIR)
 
@@ -488,6 +489,6 @@ async def predict_video_as_image(file: UploadFile = File(...)):
 # ─── Main ────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("IMAGE_SERVER_PORT", 7000))
+    port = int(os.environ.get("PORT", 7860))
     print(f"🚀 Image Prediction Server starting on http://localhost:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port)
