@@ -62,7 +62,7 @@ export default function CanvasParticles() {
           const mx = this.x - mouse.x;
           const my = this.y - mouse.y;
           const mouseDist = Math.sqrt(mx * mx + my * my);
-          if (mouseDist < 100) {
+          if (mouseDist < 100 && mouseDist > 0) {
             const force = (100 - mouseDist) / 100;
             this.x += (mx / mouseDist) * force * 2.5;
             this.y += (my / mouseDist) * force * 2.5;

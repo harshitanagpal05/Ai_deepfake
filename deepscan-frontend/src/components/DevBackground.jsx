@@ -58,7 +58,7 @@ export default function DevBackground() {
         const dy = this.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist < MOUSE_REPULSE_DIST) {
+        if (dist < MOUSE_REPULSE_DIST && dist > 0) {
           const force = (MOUSE_REPULSE_DIST - dist) / MOUSE_REPULSE_DIST;
           this.x += (dx / dist) * force * 3;
           this.y += (dy / dist) * force * 3;

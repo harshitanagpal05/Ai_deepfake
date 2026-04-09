@@ -102,7 +102,7 @@ export default function ResultCard({
               <span className="result-card__breakdown-icon">🧠</span>
               <span>NEURAL_LAYER</span>
             </div>
-            <strong style={{ color: modelScore > 60 ? 'var(--rose)' : 'var(--emerald)', fontFamily: "'JetBrains Mono', monospace" }}>
+            <strong style={{ color: modelScore == null ? 'var(--muted)' : (modelScore > 60 ? 'var(--rose)' : 'var(--emerald)'), fontFamily: "'JetBrains Mono', monospace" }}>
               {modelScore != null ? `${Number(modelScore).toFixed(1)}%` : '--'}
             </strong>
           </div>
@@ -111,7 +111,7 @@ export default function ResultCard({
               <span className="result-card__breakdown-icon">📊</span>
               <span>METADATA_EXT</span>
             </div>
-            <strong style={{ color: metadataScore > 60 ? 'var(--rose)' : 'var(--emerald)', fontFamily: "'JetBrains Mono', monospace" }}>
+            <strong style={{ color: metadataScore == null ? 'var(--muted)' : (metadataScore > 60 ? 'var(--rose)' : 'var(--emerald)'), fontFamily: "'JetBrains Mono', monospace" }}>
               {metadataScore != null ? `${Number(metadataScore).toFixed(1)}%` : '--'}
             </strong>
           </div>
