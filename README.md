@@ -19,7 +19,7 @@
 <br/>
 
 > 💀 **Deepfakes are getting scary good.**
-> Deepfake fights back — upload any image, get a verdict in seconds.
+> Deepfake fights back — upload any image or video, get a verdict in seconds.
 > *Because not everything you see is real.*
 
 <br/>
@@ -36,6 +36,7 @@
 
 - [About the Project](#-about-the-project)
 - [Features](#-features)
+- [ML Stack Architecture](#-ml-stack-architecture)
 - [System Architecture](#-system-architecture)
 - [Workflow](#-workflow)
 - [Tech Stack](#-tech-stack)
@@ -55,12 +56,12 @@
 
 **Deepfake** is a lightweight, web-based deepfake and AI-generated media verifier built as an academic project. As synthetic media becomes increasingly indistinguishable from reality, tools that help everyday users verify digital content are more critical than ever.
 
-Deepfake analyzes uploaded images through a **3-layer detection pipeline** — no GPU, no heavy setup, just results:
+Deepfake analyzes uploaded images and videos through a **3-layer detection pipeline** — powered by a real PyTorch deep learning model at its core:
 
 | Layer | What it does |
 |---|---|
-| 🎨 **Visual Artifact Analysis** | Color variance, edge sharpness, brightness anomalies |
-| 🔎 **Metadata Forensics** | EXIF parsing — camera info, AI software detection, timestamps |
+| 🤖 **Deep Learning Model** | Xception backbone extracts deep visual forgery features; custom dense head produces a binary deepfake probability |
+| 🔎 **Metadata Forensics** | EXIF parsing — camera info detection, AI software flagging, timestamp analysis |
 | ⚖️ **Score Aggregation** | Weighted fusion → final probability score + verdict |
 
 The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) with confidence rating and detailed breakdown — no technical expertise required.
@@ -74,7 +75,8 @@ The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) wi
 | Feature | Description | Status |
 |---|---|---|
 | 🖼️ **Image Upload** | Drag-and-drop or click — JPEG, PNG, WEBP supported | ✅ Done |
-| 🤖 **Artifact Detection** | Heuristic scan — color variance, edges, brightness | ✅ Done |
+| 🎞️ **Video Upload** | OpenCV frame sampling + Haar Cascade face detection | ✅ Done |
+| 🤖 **Deep Learning Detection** | Xception + custom dense head — trained forgery feature extraction | ✅ Done |
 | 📊 **AI Probability Score** | 0–100% confidence score with Real / Synthetic verdict | ✅ Done |
 | 🔎 **Metadata Forensics** | EXIF parsing — flags missing camera, AI software, timestamps | ✅ Done |
 | ⚖️ **Weighted Score Fusion** | 3 signals combined into one final score intelligently | ✅ Done |
@@ -83,6 +85,61 @@ The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) wi
 | ⚡ **Fast Pipeline** | End-to-end analysis completes in under 3 seconds | ✅ Done |
 | 🐳 **Docker Support** | Full stack containerized — one command to run everything | ✅ Done |
 | 🔁 **CI/CD Pipeline** | GitHub Actions — auto test, build, and publish on every push | ✅ Done |
+
+---
+
+## 🧬 ML Stack Architecture
+
+The project contains three ML stacks. Only one is the active primary inference path.
+
+### ✅ Active Stack — Primary Inference Path
+
+| Component | Technology |
+|---|---|
+| **Service file** | `image_server.py` |
+| **Framework** | PyTorch |
+| **Backbone** | Xception (`pytorchcv`) |
+| **Custom head** | `BatchNorm1d → Linear → ReLU → BatchNorm1d → Linear` |
+| **Pooling** | `AdaptiveAvgPool2d(1)` — resolution-robust feature compression |
+| **Video handling** | OpenCV frame sampling + Haar Cascade face detection |
+| **API layer** | FastAPI |
+
+**Model-layer purpose:**
+
+1. **Xception backbone** — extracts deep visual features from image texture and patterns
+2. **AdaptiveAvgPool2d(1)** — makes feature size robust for varied input resolutions
+3. **Custom dense head** — maps extracted features to a single binary logit
+4. **Output** — logit converted to deepfake probability, thresholded into `REAL` or `DEEPFAKE`
+5. **Video** — multiple sampled frames scored individually by the image model, then aggregated
+
+### 🟡 Secondary Stack — Dedicated Video Classifier (Not Primary)
+
+| Component | Technology |
+|---|---|
+| **Service file** | `video_server.py` |
+| **Framework** | TensorFlow / Keras |
+| **Model format** | `.keras` |
+| **Purpose** | Direct video-classifier inference from selected frames |
+
+> The Node.js backend currently routes video through the image endpoint in `image_server.py`. This stack exists for dedicated video classification but is not the active runtime path.
+
+### 🔴 Legacy Stack — Archived
+
+| Component | Technology |
+|---|---|
+| **Service file** | `deepscan-backend/ml_service/app.py` |
+| **Framework** | TensorFlow / Keras |
+| **Architecture** | Reconstructed DenseNet121-based image model |
+| **API layer** | Flask |
+| **Purpose** | Older inference service — superseded by the active FastAPI stack |
+
+```
+Active vs Legacy at a glance:
+
+  image_server.py (FastAPI + PyTorch + Xception)   ← PRIMARY ✅
+  video_server.py (Keras .keras model)              ← Secondary 🟡
+  deepscan-backend/ml_service/app.py (Flask + DenseNet121) ← Legacy 🔴
+```
 
 ---
 
@@ -102,11 +159,12 @@ The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) wi
            │                              │
            ▼                              ▼
 ┌──────────────────────┐      ┌───────────────────────────────┐
-│  METADATA FORENSICS  │      │     DETECTION ENGINE          │
-│  EXIF Parser (exifr) │      │  Sharp Image Processor        │
-│  Timestamp Checker   │      │  Color Variance Analysis      │
-│  AI Software Flags   │      │  Edge Sharpness Heuristics    │
-│  Camera Info Check   │      │  Brightness Anomaly Check     │
+│  METADATA FORENSICS  │      │     ML DETECTION ENGINE       │
+│  EXIF Parser (exifr) │      │  image_server.py (FastAPI)    │
+│  Timestamp Checker   │      │  PyTorch + Xception Backbone  │
+│  AI Software Flags   │      │  AdaptiveAvgPool2d(1)         │
+│  Camera Info Check   │      │  Custom Dense Head            │
+│                      │      │  OpenCV + Haar Cascade (video)│
 └──────────┬───────────┘      └──────────────┬────────────────┘
            │                                  │
            └──────────────┬───────────────────┘
@@ -143,6 +201,10 @@ The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) wi
     /api/analyze
     /api/results
           │
+          │ HTTP (internal)
+          ▼
+  [ ML Service Container ]   FastAPI + PyTorch — image_server.py
+          │
           │ Mongoose ODM
           ▼
   [ MongoDB Container ]      mongo:7 — Port 27017 — Volume: mongo_data
@@ -153,7 +215,7 @@ The system outputs a **probability score** (e.g., `72% — Likely Synthetic`) wi
 ## 🔄 Workflow
 
 ```
-User Uploads Image
+User Uploads Image / Video
        │
        ▼
 ┌─────────────┐
@@ -163,14 +225,16 @@ User Uploads Image
        ▼
 ┌─────────────┐
 │ Preprocess  │  ← Resize · Normalize · Extract Metadata
+│             │    (Video: OpenCV frame sampling + Haar Cascade)
 └──────┬──────┘
        │
        ├──────────────────────────┐
        ▼                          ▼
 ┌─────────────┐          ┌────────────────┐
-│  Artifact   │          │    Metadata    │
-│  Analysis   │          │   Forensics    │
-│  (Sharp)    │          │   (exifr)      │
+│  ML Model   │          │    Metadata    │
+│  Inference  │          │   Forensics    │
+│ (Xception + │          │   (exifr)      │
+│  PyTorch)   │          │               │
 └──────┬──────┘          └───────┬────────┘
        │                          │
        └──────────┬───────────────┘
@@ -196,9 +260,9 @@ User Uploads Image
 
 **Step-by-step breakdown:**
 
-1. 📤 **Upload** — JPEG, PNG, WEBP · max 5MB accepted
+1. 📤 **Upload** — JPEG, PNG, WEBP, or video · max 5MB accepted
 2. ✅ **Validate** — Multer checks file type and size before processing
-3. 🎨 **Artifact Analysis** — Sharp scans color variance, edge sharpness, and brightness irregularities
+3. 🤖 **ML Inference** — Xception backbone + custom dense head extracts deep forgery features; for video, OpenCV samples frames and Haar Cascade detects faces before per-frame scoring
 4. 🔎 **Metadata Forensics** — EXIF flags missing camera info, AI software signatures, and timestamp anomalies
 5. ⚖️ **Score Fusion** — Model 50% + Artifact 30% + Metadata 20% combined into a single probability score
 6. 🗄️ **DB Logging** — Full result saved to MongoDB for scan history
@@ -214,6 +278,9 @@ User Uploads Image
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -225,7 +292,9 @@ User Uploads Image
 |---|---|---|
 | **Frontend** | React.js · Axios · CSS3 · Nginx | Interactive UI, API communication, production serving |
 | **Backend** | Node.js · Express.js · Multer | REST API, file handling, routing |
-| **Image Analysis** | Sharp · exifr · Heuristic Detection | Pixel-level processing, metadata extraction |
+| **ML Inference** | PyTorch · Xception (pytorchcv) · FastAPI | Deep learning model serving — primary inference path |
+| **Video Processing** | OpenCV · Haar Cascade | Frame sampling, face-focused preprocessing for video input |
+| **Metadata Analysis** | exifr | EXIF metadata extraction and forensics scoring |
 | **Database** | MongoDB · Mongoose | Scan result persistence and history |
 | **DevOps** | Docker · Docker Compose · GitHub Actions | Containerization, orchestration, CI/CD |
 | **Dev Tools** | Postman · VS Code · Git · GitHub | API testing, development, version control |
@@ -267,13 +336,13 @@ Base Score: 50  (neutral starting point)
 ## 📡 API Endpoints
 
 ### `POST /api/analyze`
-Upload an image for deepfake analysis.
+Upload an image or video for deepfake analysis.
 
 **Request**
 ```
 Body    : form-data
 Key     : image (type: File)
-Allowed : .jpg · .jpeg · .png · .webp
+Allowed : .jpg · .jpeg · .png · .webp · video formats
 Max Size: 5MB
 ```
 
@@ -313,11 +382,18 @@ See [Docker Setup](#-docker-setup) below — one command runs everything.
 
 ### Option 2: Manual Setup
 
-**Prerequisites:** Node.js v18+ · MongoDB running locally
+**Prerequisites:** Node.js v18+ · Python 3.9+ · MongoDB running locally
 
 ```bash
 git clone https://github.com/namann5/Ai_deepfake.git
 cd Ai_deepfake
+```
+
+**ML Service (Active — image_server.py):**
+```bash
+cd ml_service
+pip install torch torchvision pytorchcv fastapi uvicorn opencv-python exifr
+uvicorn image_server:app --port 8000
 ```
 
 **Backend:**
@@ -331,6 +407,7 @@ Create `.env` inside `deepfake-backend/`:
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/deepfake
+ML_SERVICE_URL=http://localhost:8000
 ```
 
 **Frontend:**
@@ -340,7 +417,7 @@ npm install
 npm start
 ```
 
-**Access:** Frontend → `http://localhost:3000` · Backend → `http://localhost:5000`
+**Access:** Frontend → `http://localhost:3000` · Backend → `http://localhost:5000` · ML Service → `http://localhost:8000`
 
 ---
 
@@ -380,6 +457,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
 | Frontend App | http://localhost:3001 |
 | Backend API | http://localhost:5000 |
 | Backend Health | http://localhost:5000/ |
+| ML Service | http://localhost:8000 |
 | All Results | http://localhost:5000/api/results |
 | MongoDB | mongodb://localhost:27017/deepfake |
 
@@ -387,11 +465,11 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
 
 | Before Docker | After Docker |
 |---|---|
-| Install Node + MongoDB manually | `docker compose up` — done |
-| 3 separate terminals to start | One command starts everything |
+| Install Node + Python + MongoDB manually | `docker compose up` — done |
+| 4 separate terminals to start | One command starts everything |
 | "Works on my machine" bugs | Identical environment everywhere |
 | Hours to onboard a new dev | ~5 minutes from clone to running |
-| Manual MongoDB setup | MongoDB runs in a container automatically |
+| Manual MongoDB + ML service setup | All containers start automatically |
 
 ---
 
@@ -416,7 +494,9 @@ Pipeline file: `.github/workflows/ci.yml`
 
 ### ✅ In Scope
 - Detection of AI-generated and deepfake **images**
-- **Visual artifact** and **metadata** analysis
+- **Video** deepfake detection via frame sampling and face detection
+- **Deep learning model inference** using PyTorch + Xception backbone
+- **Metadata forensics** via EXIF analysis
 - **Probability scores** with verdict and confidence rating
 - Clean **web-based UI** accessible to non-technical users
 - **Scan history** stored in MongoDB
@@ -424,7 +504,7 @@ Pipeline file: `.github/workflows/ci.yml`
 - **CI/CD** automated testing and deployment pipeline
 
 ### ❌ Out of Scope
-- Real-time **video** deepfake detection
+- Real-time live-stream deepfake detection
 - **Legal or forensic-grade** accuracy guarantees
 - Detection of AI models released after training data cutoff
 - Audio deepfake analysis
@@ -463,14 +543,16 @@ Phase 8  ██░░░░░░░░  Deployment & Documentation             
 ## 📚 References
 
 1. Research papers on Deepfake Detection
-2. Open-source AI-generated image detection models
-3. IEEE and ACM digital libraries
-4. Sharp.js documentation — image processing
-5. exifr documentation — EXIF metadata parsing
-6. FaceForensics++ dataset — Kaggle
-7. Docker documentation — containerization
-8. GitHub Actions documentation — CI/CD
-9. Online resources — computer vision & deep learning
+2. FaceForensics++ dataset — Kaggle
+3. Xception architecture — Chollet, F. (2017)
+4. pytorchcv documentation — pre-trained model library
+5. PyTorch documentation — model training and inference
+6. OpenCV documentation — video processing and face detection
+7. exifr documentation — EXIF metadata parsing
+8. FastAPI documentation — ML model serving
+9. IEEE and ACM digital libraries
+10. Docker documentation — containerization
+11. GitHub Actions documentation — CI/CD
 
 ---
 
